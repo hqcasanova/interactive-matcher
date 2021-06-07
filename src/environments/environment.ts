@@ -2,20 +2,10 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { environment as base } from "./environment.base";
+
 export const environment = {
-  production: false,
-  
-  // Location of folder with recording data files on server
-  dataFolder: '/assets/', 
-  
-  // A header in the CSV file specifying field names is assumed.
-  csvHeader: true,
-
-  // Default fields recordings are sorted by
-  defaultSort: ['title', 'artist'],
-
-  // Default options for the fuzzy search engine
-  defaultFuzzy: {threshold: 0.6, keys: ['title', 'artist', 'isrc']}
+  ...base,
 };
 
 /*
