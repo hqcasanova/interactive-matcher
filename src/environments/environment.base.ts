@@ -2,7 +2,7 @@ export const environment = {
   production: false,
   
   // Location of folder with recording data files on server
-  dataFolder: '/assets/', 
+  dataFolder: 'assets/', 
   
   // A header in the CSV file specifying field names is assumed.
   csvHeader: true,
