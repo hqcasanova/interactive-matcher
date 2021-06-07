@@ -1,0 +1,25 @@
+.recording-item {
+  margin: 1.25rem 0;
+  
+  .recording-artist {
+    font-size: 1rem;
+  }
+
+  .footer-duration {
+    float: right;
+    margin: 0;
+  }
+}
+
+.mat-list-text {
+  padding-right: 0 !important;
+}
+
+.mat-card-title {
+  font-weight: 400;
+}
+
+.mat-card-footer {
+  overflow: hidden;
+  padding: .25rem .5rem;
+}

@@ -1,0 +1,10 @@
+<mat-card class="recording-item">
+  <mat-card-title class="recording-title">{{ recording.title }}</mat-card-title>
+  <mat-card-subtitle class="recording-artist">{{ recording.artist }}</mat-card-subtitle>
+  <mat-card-footer>
+    <span class="footer-isrc">{{ recording.isrc }}</span>
+    <span class="footer-duration mat-card-subtitle" *ngIf="recording.duration">
+      {{ +recording.duration * 1000 | date:'mm:ss' }}
+    </span>
+  </mat-card-footer>
+</mat-card>

@@ -1,0 +1,27 @@
+<mat-selection-list class="recording-list" 
+  [multiple]="false"
+  (selectionChange)="onSelection($event)">
+  <ng-container *ngIf="recordings !== undefined">
+    <span class="list-count">{{ recordings.length }} recordings</span>
+    
+    <mat-list-option  *ngFor="let recording of recordings" [value]="recording">
+      <recording-item [recording]="recording"></recording-item>
+    </mat-list-option>
+
+    <div *ngIf="!recordings.length" class="empty-wrapper">
+      <ng-content></ng-content>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="isLoading || error">
+    <mat-progress-bar *ngIf="!error" mode="indeterminate"></mat-progress-bar>
+    
+    <mat-card *ngIf="error" class="error-card">
+      <mat-card-title class="error-title">
+        <mat-icon aria-hidden="false" aria-label="Exclamation icon">error_outline</mat-icon>
+        Something went wrong
+      </mat-card-title>
+      <mat-card-subtitle>{{ error }}</mat-card-subtitle>
+    </mat-card>
+  </ng-container>
+</mat-selection-list>

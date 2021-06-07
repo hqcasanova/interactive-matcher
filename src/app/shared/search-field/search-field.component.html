@@ -1,0 +1,11 @@
+<mat-form-field class="search-field">
+  <input matInput
+    [(ngModel)]="query"
+    type="search"
+    placeholder="Title, artist or ID"
+    (keyup.enter)="onSearch($event)">
+  <mat-label>Search for recordings...</mat-label>
+  <button matSuffix mat-icon-button aria-label="Search" (click)="onSearch($event)">
+    <mat-icon>search</mat-icon>
+  </button>
+</mat-form-field>

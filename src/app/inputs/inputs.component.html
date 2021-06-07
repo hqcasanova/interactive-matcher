@@ -1,0 +1,14 @@
+<h2 class="mat-display-1">Unmatched</h2>
+<recording-list
+  [recordings]="recordings" 
+  [isLoading]="isLoading" 
+  [error]="error"
+  (selection)="onSelection($event)">
+  <mat-card>
+    <mat-card-title class="empty-title">
+      <mat-icon aria-hidden="false" aria-label="Info icon">info</mat-icon>
+      No unmatched recordings
+    </mat-card-title>
+    <mat-card-subtitle>Maybe load some more?</mat-card-subtitle>
+  </mat-card>
+</recording-list>

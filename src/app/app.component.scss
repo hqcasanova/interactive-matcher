@@ -1,0 +1,34 @@
+:host {
+  .app-list {
+    margin-bottom: 2.75rem;
+  }
+
+  .app-actions {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    display: flex;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    
+    .app-list {
+      flex: 1;
+      overflow-x: hidden;
+      overflow-y: auto;
+      margin-bottom: 0;
+    }
+
+    .app-actions {
+      flex-direction: column;
+      padding: 0 .5rem;
+    }
+  }
+}

@@ -1,0 +1,40 @@
+@import '~@angular/material/theming';
+.recording-list {
+  .list-count {
+    display: inline-block;
+    margin-bottom: .25rem;
+  }
+  .mat-list-option {
+    height: auto !important;
+    border-radius: .5rem;
+  
+    &[aria-selected="true"], &:focus {
+      background: mat-color($mat-indigo, 100);
+    }
+
+    &:hover:not([aria-selected="true"]) {
+      background: mat-color($mat-indigo, 50);
+    }
+  }
+
+  .error-title, .empty-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: .5em;
+    
+    .mat-icon {
+      margin-right: .4em;
+    }
+  }
+
+  .error-title {
+    color: mat-color($mat-red, 900);
+  }
+
+  .empty-wrapper {
+    margin-top: .75rem;
+  }
+}
+
+
+
