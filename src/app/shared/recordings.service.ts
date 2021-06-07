@@ -27,7 +27,7 @@ export class RecordingsService {
    * observable resulting from the request. The field delimiter is auto-detected and data sorted
    * alphabetically.
    * @param url - Path to the data.
-   * @returns Observable with collection of recordings.
+   * @returns Observable with new collection of recordings.
    */
   fetch(url: string): Observable<Recording[]> {
     return this.http.get(url, {responseType: 'text'})
@@ -51,9 +51,15 @@ export class RecordingsService {
     }
   }
 
+  /**
+   * Removes all recordings that have the same serialised data as a given one.
+   * @param collection - Original collection to remove items from.
+   * @param recording - Object representative of the recording to be removed.
+   * @returns Observable with new collection of recordings.
+   */
   remove(collection: Recording[], recording: Recording): Observable<Recording[]> {
     try {
-      return of(collection.filter(item => item.isrc !== recording.isrc));
+      return of(collection.filter(item => this.serialise(item) !== this.serialise(recording)));
     } catch(error) {
       return throwError(error);
     }
