@@ -18,6 +18,6 @@ export class SearchFieldComponent implements OnInit {
     const query = this.query.trim();
 
     event.stopPropagation();
-    query && this.search.emit(query);
+    this.search.emit(query);
   }
 }
