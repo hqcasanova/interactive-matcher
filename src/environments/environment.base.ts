@@ -4,12 +4,31 @@ export const environment = {
   // Location of folder with recording data files on server
   dataFolder: 'assets/', 
   
-  // A header in the CSV file specifying field names is assumed.
-  csvHeader: true,
+  // Default options for the parsing during fetch.
+  defaultFetch: {header: true, skipEmptyLines: true},
 
   // Default fields recordings are sorted by
   defaultSort: ['title', 'artist'],
 
   // Default options for the fuzzy search engine
-  defaultFuzzy: {threshold: 0.6, keys: ['title', 'artist', 'isrc']}
+  defaultFuzzy: {
+    keys: [
+      {
+        name: 'title',
+        weight: 0.8
+      },
+      {
+        name: 'artist',
+        weight: 0.8
+      },
+      {
+        name: 'isrc',
+        weight: 1
+      }
+    ],
+    threshold: 0.7
+  },
+
+  // Time in milliseconds before notifications are auto-dismissed, if at all.
+  snackbarDelay: 3000
 };

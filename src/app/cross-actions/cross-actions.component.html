@@ -1,14 +1,12 @@
-<button color="primary" 
+<button color="primary" class="match-btn" 
   mat-fab 
   aria-label="Match recordings"
-  [disabled]="!isSelInput || !isSelDatabase"
   (click)="onMatch()">
   Match
 </button>
-<button color="primary"
+<button color="primary" class="register-btn"
   mat-stroked-button
-  [disabled]="!isSelInput"
   (click)="onRegister()">
-  <mat-icon aria-hidden="false" aria-label="Plus icon">add</mat-icon>
+  <mat-icon aria-hidden="false" aria-label="Right arrow">east</mat-icon>
   Register
 </button>

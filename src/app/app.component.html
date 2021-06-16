@@ -1,5 +1,22 @@
+<mat-toolbar class="app-header">
+  <h1 class="app-branding">
+    <mat-icon class="app-logo" aria-hidden="false" aria-label="Fingerprint">fingerprint</mat-icon>
+    <span class="app-name">			
+      Recordnise
+    </span>
+  </h1>
+  <span class="app-tagline">Interactive record matching</span>
+  <span class="link-wrapper">
+    <a class="source-link" href="https://github.com/hqcasanova/interactive-matcher" target="_blank"
+      mat-raised-button>
+      View source
+    </a>
+  </span>
+</mat-toolbar>
+
 <app-inputs class="app-list" 
   [dataFile]="'sound_recordings_input_report.csv'"
+  (selection)="database.autoSearch($event)"
   #inputs>
 </app-inputs>
 
@@ -12,6 +29,5 @@
 
 <app-database class="app-list" 
   [dataFile]="'sound_recordings.csv'"
-  [searchQuery]="inputs.serialRecording"
   #database>
 </app-database>

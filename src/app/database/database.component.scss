@@ -4,6 +4,57 @@
   background-color: darken(#fafafa, 5%);
 
   .mat-display-1 {
-    margin-bottom: 1rem;
+    position: absolute;
+  }
+
+  .mat-expansion-panel {
+    margin-top: -.3rem;
+    background: none;
+    box-shadow: none;
+
+    .mat-expansion-panel-header {
+      pointer-events: none;
+
+      &:hover {
+        background: none;
+      }
+    }
+
+    .search-expand-wrapper {
+      justify-content: space-between;
+      margin-left: 8rem;
+      margin-right: .5rem;
+    }
+
+    .top-btn {
+      width: auto;
+      margin-top: .34rem;
+      transition: margin .3s ease;
+      pointer-events: all;
+
+      &.seeall-btn {
+        background: transparent;
+
+        &:hover, &:focus {
+          background: #fafafa;
+        }
+      }
+
+      .mat-icon {
+        margin-right: -.2em;
+        font-size: 1em;
+      }
+    }
+    &.mat-expanded {
+      margin-bottom: -1rem;
+
+      .mat-expansion-panel-header {
+        height: 48px;
+      }
+
+      .top-btn {
+        margin-top: -.25rem;
+      }
+    }
   }
 }

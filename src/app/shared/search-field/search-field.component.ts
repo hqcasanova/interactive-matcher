@@ -6,8 +6,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./search-field.component.scss']
 })
 export class SearchFieldComponent implements OnInit {
+  @Input() placeholder: string = '';
   @Input() query: string = '';
-  @Output() search = new EventEmitter<string>();
+
+  // Avoids overlapping the non-standard "search" event
+  @Output() lookup = new EventEmitter<string>();
 
   constructor() { }
 
@@ -18,6 +21,6 @@ export class SearchFieldComponent implements OnInit {
     const query = this.query.trim();
 
     event.stopPropagation();
-    this.search.emit(query);
+    this.lookup.emit(query);
   }
 }

@@ -1,0 +1,20 @@
+@import '~@angular/material/theming';
+
+.match-btn {
+  width: 4.5em;
+  height: 4.25em;
+  background: mat-color($mat-indigo, 500);
+
+  &:hover:not(:focus), &:focus {
+    background: mat-color($mat-indigo, 900);
+  }
+}
+
+.register-btn {
+  padding: .25em .75em;
+  border-color: mat-color($mat-indigo, 200);
+
+  &:hover:not(:focus), &:focus {
+    border-color: mat-color($mat-indigo, 400);
+  }
+}

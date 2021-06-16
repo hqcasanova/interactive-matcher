@@ -3,4 +3,5 @@ export interface Recording {
   artist: string;
   duration: string;
   isrc: string;
+  [key: string]: string;
 }

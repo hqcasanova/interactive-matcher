@@ -1,12 +1,28 @@
 <mat-selection-list class="recording-list" 
   [multiple]="false"
-  (selectionChange)="onSelection($event)">
+  #list>
   <ng-container *ngIf="recordings !== undefined">
-    <span class="list-count">{{ recordings.length }} recordings</span>
-    
-    <mat-list-option  *ngFor="let recording of recordings" [value]="recording">
-      <recording-item [recording]="recording"></recording-item>
-    </mat-list-option>
+    <div class="counts-wrapper">
+      <span class="total-count list-count">{{ recordings.length }} recordings</span>
+      <span class="selected-count list-count"
+        [style.visibility]="list.selectedOptions.selected.length ? 'visible' : 'hidden'">
+        <button class="selected-btn" mat-icon-button color="primary" aria-label="selected count button"
+          disableRipple
+          (click)="showSelected()">
+          {{ list.selectedOptions.selected.length }} selected
+        </button>
+      </span>
+    </div>
+    <div class="options-wrapper">
+      <mat-list-option class="list-option" 
+        *ngFor="let recording of recordings"
+        [value]="recording"
+        [ngClass]="option.selected ? 'selected-option' : ''"
+        (click)="onSelection(recording)"
+        #option>
+        <recording-item [recording]="recording"></recording-item>
+      </mat-list-option>
+    </div>
 
     <div *ngIf="!recordings.length" class="empty-wrapper">
       <ng-content></ng-content>
@@ -14,9 +30,12 @@
   </ng-container>
 
   <ng-container *ngIf="isLoading || error">
-    <mat-progress-bar *ngIf="!error" mode="indeterminate"></mat-progress-bar>
-    
-    <mat-card *ngIf="error" class="error-card">
+    <div *ngIf="!error" class="loading-wrapper">
+      <p>{{ loadMessage }}</p>
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+
+    <mat-card *ngIf="error" class="error-wrapper">
       <mat-card-title class="error-title">
         <mat-icon aria-hidden="false" aria-label="Exclamation icon">error_outline</mat-icon>
         Something went wrong

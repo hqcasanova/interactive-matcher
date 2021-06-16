@@ -1,8 +1,40 @@
 <h2 class="mat-display-1">Registered</h2>
-<search-field (search)="searchQuery = $event"></search-field>
+
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-description class="search-expand-wrapper">
+        <button class="top-btn seeall-btn" mat-flat-button aria-label="See all recordings"
+          [style.visibility]="(recordings || []).length > (currRecordings || []).length ? 'visible' : 'hidden'"
+          disableRipple
+          (click)="seeAll(); $event.stopPropagation()">
+          See all
+        </button>
+        <button class="top-btn" mat-icon-button aria-label="expand button for search field"
+          color="accent"
+          disableRipple>
+          <mat-icon aria-hidden="false" aria-label="Dot"
+            [style.visibility]="search.query ? 'visible' : 'hidden'"
+            color="primary">
+              fiber_manual_record
+          </mat-icon>
+          Search
+        </button>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <search-field 
+      [placeholder]="PLACEHOLDER"
+      (lookup)="onSearch($event)"
+      #search>
+    </search-field>
+  </mat-expansion-panel>
+</mat-accordion>
+
 <recording-list
-  [recordings]="(recordings || []) | ngFuse:searchQuery:DEFAULT_FUZZY" 
-  [isLoading]="isLoading" 
+  [recordings]="currRecordings" 
+  [isLoading]="isLoading"
+  [loadMessage]="loadMessage"
   [error]="error"
   (selection)="onSelection($event)">
   <mat-card>

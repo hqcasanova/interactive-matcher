@@ -1,4 +1,37 @@
 :host {
+  display: block;
+  padding-top: 64px;
+
+  .app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    color: #fafafa;
+    background: #c74d61;
+    justify-content: space-between;
+
+    .app-logo {
+      width: auto;
+      height: auto;
+      font-size: 2.2em;
+      vertical-align: middle;
+    }
+
+    .app-name {
+      vertical-align: middle;
+      font-weight: 300;
+      font-size: 2rem;
+    }
+
+    .app-tagline {
+      display: none;
+      font-weight: 300;
+      color: #000;
+    }
+  }
+
   .app-list {
     margin-bottom: 2.75rem;
   }
@@ -17,18 +50,37 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 1rem;
+    padding: calc(64px + 1rem) 1rem 1rem;
     
+    .app-header {
+      .app-branding {
+        flex: 1;
+      }
+      
+      .app-tagline {
+        display: block;
+      }
+
+      .link-wrapper {
+        flex: 1;
+        
+        .source-link {
+          float: right;
+        }
+      }
+    }
+
     .app-list {
+      display: flex;
+      flex-direction: column;
       flex: 1;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: hidden;
       margin-bottom: 0;
     }
 
     .app-actions {
       flex-direction: column;
-      padding: 0 .5rem;
+      padding: 0 .75rem;
     }
   }
 }
