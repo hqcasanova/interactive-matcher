@@ -17,4 +17,10 @@
   &:hover:not(:focus), &:focus {
     border-color: mat-color($mat-indigo, 400);
   }
+
+  @media (min-width: 1024px) {
+    .mat-icon {
+      transform: rotate(-90deg);
+    }
+  }
 }
