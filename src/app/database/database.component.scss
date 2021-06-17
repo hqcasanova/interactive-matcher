@@ -1,5 +1,5 @@
 :host {
-  background-color: darken(#fafafa, 5%);
+  background-color: var(--accent-lighter);
 
   .mat-display-1 {
     position: absolute;
@@ -20,7 +20,7 @@
 
     .search-expand-wrapper {
       justify-content: space-between;
-      margin-left: 8rem;
+      margin-left: 9rem;
       margin-right: .5rem;
     }
 

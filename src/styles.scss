@@ -11,8 +11,74 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$interactive-matcher-primary: mat.define-palette(mat.$indigo-palette);
-$interactive-matcher-accent: mat.define-palette(mat.$pink-palette, 500, 600, 700);
+$primary-palette: (
+  50 : #f8e8eb,
+  100 : #edc5ce,
+  200 : #e19eae,
+  300 : #d4778d,
+  400 : #cb5a74,
+  500 : #c23d5c,
+  600 : #bc3754,
+  700 : #b42f4a,
+  800 : #ac2741,
+  900 : #9f1a30,
+  A100 : #ffd5db,
+  A200 : #ffa2b0,
+  A400 : #ff6f84,
+  A700 : #ff566e,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$accent-palette: (
+  50 : #e0ecf5,
+  100 : #b3d0e5,
+  200 : #80b1d4,
+  300 : #4d92c3,
+  400 : #267ab6,
+  500 : #0063a9,
+  600 : #005ba2,
+  700 : #005198,
+  800 : #00478f,
+  900 : #00357e,
+  A100 : #acc8ff,
+  A200 : #79a6ff,
+  A400 : #4685ff,
+  A700 : #2c74ff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #ffffff,
+  )
+);
+
+$interactive-matcher-primary: mat.define-palette($primary-palette);
+$interactive-matcher-accent: mat.define-palette($accent-palette);
 
 // The warn palette is optional (defaults to red).
 $interactive-matcher-warn: mat.define-palette(mat.$red-palette);
@@ -32,12 +98,15 @@ $interactive-matcher-theme: mat.define-light-theme((
 // that you are using.
 @include mat.all-component-themes($interactive-matcher-theme);
 
-/* You can add global styles to this file, and also import other style files */
+/* COMMON DEFAULTS */
 html { height: 100%; }
 body { 
   min-height: 100%;
   margin: 1rem; 
-  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   background: #fafafa;
 
   @media (min-width: 1024px) {
@@ -45,6 +114,33 @@ body {
   }
 }
 
+h1, h2 {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+/* MATERIAL DEFAULTS */
+// Globalises app colours without importing material theming files
+:root {
+  --primary: #{map-get($interactive-matcher-primary, 500)};
+  --primary-light: #{map-get($interactive-matcher-primary, 200)};
+  --primary-lighter: #{map-get($interactive-matcher-primary, 100)};
+  --primary-dark: #{map-get($interactive-matcher-primary, 700)};
+
+  --accent: #{map-get($interactive-matcher-accent, 500)};
+  --accent-light: #{map-get($interactive-matcher-accent, 200)};
+  --accent-lighter: #{map-get($interactive-matcher-accent, 50)};
+  --accent-dark: #{map-get($interactive-matcher-accent, 700)};
+  
+  --hyper-accent: #e7ae2f;
+  --hyper-accent-light: #{lighten(#e7ae2f, 20%)};
+  --hyper-accent-lighter: #{lighten(#e7ae2f, 30%)};
+
+  --error: #{map-get($interactive-matcher-warn, 500)};
+  --error-light: #{map-get($interactive-matcher-warn, 200)};
+  --error-dark: #{map-get($interactive-matcher-warn, 900)};
+}
+
+// Title-cases all field labels
 .mat-form-field-label:first-letter {
   text-transform: capitalize;
 }
