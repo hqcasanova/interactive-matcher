@@ -2,9 +2,8 @@
   <input matInput
     [(ngModel)]="query"
     type="search"
-    [placeholder]="placeholder"
     (keyup.enter)="onSearch($event)">
-  <mat-label>Search for recordings...</mat-label>
+  <mat-label>{{ placeholder }}</mat-label>
   <button matSuffix mat-icon-button aria-label="Search" (click)="onSearch($event)" color="accent">
     <mat-icon>search</mat-icon>
   </button>

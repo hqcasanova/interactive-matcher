@@ -30,5 +30,7 @@ export const environment = {
   },
 
   // Time in milliseconds before notifications are auto-dismissed, if at all.
-  snackbarDelay: 3000
+  snackbarDelay: 3000,
+
+  acronyms: ['isrc']
 };

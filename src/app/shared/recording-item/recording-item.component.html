@@ -4,7 +4,8 @@
   <mat-card-footer>
     <span class="footer-isrc">{{ recording.isrc }}</span>
     <span class="footer-duration mat-card-subtitle" *ngIf="recording.duration">
-      {{ +recording.duration * 1000 | date:'mm:ss' }}
+      {{ durMilliseconds | date:'mm' }}m
+      {{ durMilliseconds | date:'ss' }}s
     </span>
   </mat-card-footer>
 </mat-card>

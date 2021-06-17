@@ -12,6 +12,7 @@ import { environment } from "src/environments/environment";
 const DEFAULT_FETCH = environment.defaultFetch;
 const DEFAULT_SORT = environment.defaultSort;
 const DEFAULT_FUZZY = environment.defaultFuzzy;
+const ACRONYMS = environment.acronyms;
 
 @Injectable({
   providedIn: 'root'
@@ -105,6 +106,33 @@ export class RecordingsService {
   }
 
   /**
+   * Converts the keys in the fuzzy search configuration options into their respective names or
+   * a serialised version using commas and a given conjunction (as in a human-readable list).
+   * @param [lastConjunction = ''] - Conjunction to be used in the human-readable version. If none
+   * given, the serialisation is skipped.
+   * @param toUppercase - Array of key names that should be converted to all uppercase.
+   * @returns An ennumeration list of key names or an array thereof.
+   */
+   fuzzyKeys(lastConjunction: string = '', toUppercase = ACRONYMS): string[] | string {
+    const keyArray = DEFAULT_FUZZY.keys.map(keyProps => {
+      if (toUppercase.indexOf(keyProps.name) > -1) {
+        return keyProps.name.toUpperCase();
+      } else {
+        return keyProps.name;
+      }
+    });
+
+    // Adds the conjunction only at the end
+    if (lastConjunction) {
+      return keyArray.reduce((a, b, i, array) => {
+        return a + (i < array.length - 1 ? ', ' : lastConjunction) + b;
+      });
+    }
+
+    return keyArray;
+  }
+
+  /**
    * Performs a fuzzy search on a set of recordings either with a serialised string version of a given 
    * recording or a plain string. After that, the recordings' order is re-balanced in terms of their
    * durations. This is mainly due to the numeric nature of the duration, which does not lend itself to
@@ -121,7 +149,6 @@ export class RecordingsService {
   ): Observable<Recording[]> {
     try {
       const fuse = new Fuse(collection, {...options, includeScore: true});
-      let fuzzyKeys;
       let recordings;
 
       // Query passed in directly => leaves collection intact if empty string
@@ -134,11 +161,10 @@ export class RecordingsService {
 
       // Recording passed in => serialise only values for keys set in fuzzy options and re-balance by duration
       } else {
-        fuzzyKeys = options.keys.map((keyProps: any) => keyProps.name);
-        recordings = fuse.search(this.serialise(query, fuzzyKeys));
+        recordings = fuse.search(this.serialise(query, this.fuzzyKeys('', []) as string[]));
         recordings = this.sortDurationDiff(recordings, query.duration);
       }
-      
+     
       // By default, fuzzy results items are nested under an "item" property
       recordings = recordings.map(result => result.item);
       return of(recordings);
@@ -168,6 +194,7 @@ export class RecordingsService {
     let cloneDiff;
     
     // Clones the original results while converting durations to integers and calculating their differences.
+    // TODO: don't like the i === 0 hack.
     cloneDiff = collection.map((result, i) => {
       const defaultDur = i === 0 ? iDuration + 1 : 0;
       const durationInt = parseInt(result.item.duration || defaultDur.toString());
@@ -176,13 +203,13 @@ export class RecordingsService {
       // Scores are rounded to avoid treating negligible score differences as meaningful.
       return Object.assign({}, result, {
         diff: durationDiff,
-        score: result.score ? Math.round(result.score) : 0
+        score: result.score ? Math.round((result.score + Number.EPSILON) * 100) / 100 : 0
       });
     });
 
     // Bubbles up durations similar to the reference recording's whenever scores are also similar. 
     return cloneDiff.sort((a, b) => {
-      if (a.score === b.score) {
+      if (Math.abs(a.score - b.score) < 0.25) {
         return a.diff - b.diff;
       } else {
         return 0;

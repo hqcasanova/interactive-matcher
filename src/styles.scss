@@ -44,3 +44,7 @@ body {
     overflow: hidden;
   }
 }
+
+.mat-form-field-label:first-letter {
+  text-transform: capitalize;
+}

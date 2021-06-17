@@ -8,7 +8,6 @@ import { Recording } from '../shared/recording.model';
 import { RecordingsService } from '../shared/recordings.service';
 
 const SNACK_DELAY = environment.snackbarDelay;
-const DEFAULT_FUZZY = environment.defaultFuzzy;
 
 @Component({
   selector: 'app-database',
@@ -16,7 +15,7 @@ const DEFAULT_FUZZY = environment.defaultFuzzy;
   styleUrls: ['../inputs/inputs.component.scss', './database.component.scss']
 })
 export class DatabaseComponent extends InputsComponent implements OnInit {
-  PLACEHOLDER: string = DEFAULT_FUZZY.keys.map(keyProps => keyProps.name).join(', ');
+  searchPlaceholder: string = '';
   
   // Collection where the results of all operations of filtering/search are saved to so as to preserve
   // the original copy.
@@ -38,6 +37,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
   
   constructor(recordingsService: RecordingsService, snackBar: MatSnackBar) {
     super(recordingsService, snackBar);
+    this.searchPlaceholder = this.recordingsService.fuzzyKeys(' and/or ') as string;
   }
 
   /**

@@ -8,9 +8,20 @@ import { Recording } from '../recording.model';
   encapsulation: ViewEncapsulation.None
 })
 export class RecordingItemComponent implements OnInit {
-  @Input() recording!: Recording;
+  durMilliseconds: number = 0;
+  
+  private _recording!: Recording;
+  @Input() 
+  get recording() {
+    return this._recording;
+  }
+  set recording(data: Recording) {
+    this._recording = data;
+    this.durMilliseconds = +this.recording.duration * 1000;
+  } 
 
-  constructor() { }
+  constructor() { 
+  }
 
   ngOnInit(): void {
   }
