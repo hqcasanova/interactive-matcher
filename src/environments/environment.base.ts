@@ -19,7 +19,7 @@ export const environment = {
       },
       {
         name: 'artist',
-        weight: 0.8
+        weight: 0.7
       },
       {
         name: 'isrc',
@@ -30,7 +30,5 @@ export const environment = {
   },
 
   // Time in milliseconds before notifications are auto-dismissed, if at all.
-  snackbarDelay: 3000,
-
-  acronyms: ['isrc']
+  snackbarDelay: 3000
 };

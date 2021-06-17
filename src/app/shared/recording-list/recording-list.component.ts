@@ -9,6 +9,7 @@ import { Recording } from '../recording.model';
 })
 export class RecordingListComponent implements OnInit {
   @Input() recordings?: Recording[];
+  @Input() reference?: Recording;
   @Input() error: string = '';
   @Input() isLoading: boolean = false;
   @Input() loadMessage: string = '';

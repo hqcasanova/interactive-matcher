@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { of, Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Papa } from 'ngx-papaparse';
-import { isEmpty, isEqual, orderBy, pick } from 'lodash-es';
+import { isEmpty, orderBy, pick } from 'lodash-es';
 import Fuse from 'fuse.js';
 
 import { Recording } from './recording.model';
@@ -12,7 +12,6 @@ import { environment } from "src/environments/environment";
 const DEFAULT_FETCH = environment.defaultFetch;
 const DEFAULT_SORT = environment.defaultSort;
 const DEFAULT_FUZZY = environment.defaultFuzzy;
-const ACRONYMS = environment.acronyms;
 
 @Injectable({
   providedIn: 'root'
@@ -107,14 +106,16 @@ export class RecordingsService {
 
   /**
    * Converts the keys in the fuzzy search configuration options into their respective names or
-   * a serialised version using commas and a given conjunction (as in a human-readable list).
+   * a serialised version using commas and a given conjunction (as in a human-readable list). In
+   * both cases, keys are listed by descending weight order.
    * @param [lastConjunction = ''] - Conjunction to be used in the human-readable version. If none
    * given, the serialisation is skipped.
    * @param toUppercase - Array of key names that should be converted to all uppercase.
    * @returns An ennumeration list of key names or an array thereof.
    */
-   fuzzyKeys(lastConjunction: string = '', toUppercase = ACRONYMS): string[] | string {
-    const keyArray = DEFAULT_FUZZY.keys.map(keyProps => {
+   fuzzyKeys(lastConjunction: string = '', toUppercase: string[] = ['']): string[] | string {
+    const keysByWeight = orderBy(DEFAULT_FUZZY.keys, 'weight', 'desc');
+    const keyArray = keysByWeight.map(keyProps => {
       if (toUppercase.indexOf(keyProps.name) > -1) {
         return keyProps.name.toUpperCase();
       } else {
@@ -159,10 +160,14 @@ export class RecordingsService {
           return of(collection);
         }
 
-      // Recording passed in => serialise only values for keys set in fuzzy options and re-balance by duration
+      // Recording passed in => serialises only values for keys in fuzzy options and re-balances by duration
       } else {
-        recordings = fuse.search(this.serialise(query, this.fuzzyKeys('', []) as string[]));
-        recordings = this.sortDurationDiff(recordings, query.duration);
+        const fuzzyKeys = this.fuzzyKeys() as string[];
+
+        recordings = fuse.search(this.serialise(query, fuzzyKeys));
+        if (fuzzyKeys.indexOf('duration') === -1) {
+          recordings = this.sortDurationDiff(recordings, query.duration);
+        }
       }
      
       // By default, fuzzy results items are nested under an "item" property
@@ -179,7 +184,7 @@ export class RecordingsService {
    * reference recording's duration. Bubbling only takes place if the scores are roughly similar or 
    * if the reference recording has no duration, setting it to zero by default. If a database
    * recording has no duration either and comes on top after the fuzzy search, it makes it equal to the 
-   * reference's duration + 1 so that only a recording very similar duration can replace it at the top.
+   * reference's duration + 1 so that only a recording with a very similar duration can replace it at the top.
    * Note that fuzzy scores are based on Levenshtein distances: the lower the figure, the higher the score 
    * really.
    * @param collection - Results from fuzzy search with scores.
@@ -190,15 +195,14 @@ export class RecordingsService {
     collection: Fuse.FuseResult<Recording>[], 
     duration: string
   ): Fuse.FuseResult<Recording>[] {
-    const iDuration = parseInt(duration || '0');
+    const recDuration = parseInt(duration || '0');
     let cloneDiff;
     
     // Clones the original results while converting durations to integers and calculating their differences.
-    // TODO: don't like the i === 0 hack.
     cloneDiff = collection.map((result, i) => {
-      const defaultDur = i === 0 ? iDuration + 1 : 0;
-      const durationInt = parseInt(result.item.duration || defaultDur.toString());
-      const durationDiff = Math.abs(durationInt - iDuration);
+      const defaultDur = i === 0 ? recDuration + 1 : 0;
+      const iDuration = parseInt(result.item.duration || defaultDur.toString());
+      const durationDiff = Math.abs(iDuration - recDuration);
 
       // Scores are rounded to avoid treating negligible score differences as meaningful.
       return Object.assign({}, result, {
@@ -209,7 +213,7 @@ export class RecordingsService {
 
     // Bubbles up durations similar to the reference recording's whenever scores are also similar. 
     return cloneDiff.sort((a, b) => {
-      if (Math.abs(a.score - b.score) < 0.25) {
+      if (Math.abs(a.score - b.score) < 0.16) {
         return a.diff - b.diff;
       } else {
         return 0;

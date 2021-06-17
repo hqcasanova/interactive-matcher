@@ -2,7 +2,10 @@
   <mat-card-title class="recording-title">{{ recording.title }}</mat-card-title>
   <mat-card-subtitle class="recording-artist">{{ recording.artist }}</mat-card-subtitle>
   <mat-card-footer>
-    <span class="footer-isrc">{{ recording.isrc }}</span>
+    <span class="footer-isrc"
+      [class.highlight]="isHighlightIsrc">
+        {{ recording.isrc }}
+    </span>
     <span class="footer-duration mat-card-subtitle" *ngIf="recording.duration">
       {{ durMilliseconds | date:'mm' }}m
       {{ durMilliseconds | date:'ss' }}s

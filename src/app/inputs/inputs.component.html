@@ -1,6 +1,7 @@
 <h2 class="mat-display-1">Unmatched</h2>
 <recording-list
   [recordings]="recordings" 
+  [reference]="selected"
   [isLoading]="isLoading" 
   [error]="error"
   (selection)="onSelection($event)">

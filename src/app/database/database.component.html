@@ -8,7 +8,7 @@
           [style.visibility]="(recordings || []).length > (currRecordings || []).length ? 'visible' : 'hidden'"
           disableRipple
           (click)="seeAll(); $event.stopPropagation()">
-          See all
+          View all
         </button>
         <button class="top-btn" mat-icon-button aria-label="expand button for search field"
           color="accent"
@@ -32,7 +32,8 @@
 </mat-accordion>
 
 <recording-list
-  [recordings]="currRecordings" 
+  [recordings]="currRecordings"
+  [reference]="reference"
   [isLoading]="isLoading"
   [loadMessage]="loadMessage"
   [error]="error"

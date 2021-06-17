@@ -17,10 +17,13 @@
       <mat-list-option class="list-option" 
         *ngFor="let recording of recordings"
         [value]="recording"
-        [ngClass]="option.selected ? 'selected-option' : ''"
+        [class.selected-option]="option.selected"
         (click)="onSelection(recording)"
         #option>
-        <recording-item [recording]="recording"></recording-item>
+        <recording-item 
+          [recording]="recording"
+          [isHighlightIsrc]="recording.isrc === reference?.isrc">
+        </recording-item>
       </mat-list-option>
     </div>
 

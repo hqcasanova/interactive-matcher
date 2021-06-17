@@ -15,6 +15,8 @@ const SNACK_DELAY = environment.snackbarDelay;
   styleUrls: ['../inputs/inputs.component.scss', './database.component.scss']
 })
 export class DatabaseComponent extends InputsComponent implements OnInit {
+  @Input() reference?: Recording;
+
   searchPlaceholder: string = '';
   
   // Collection where the results of all operations of filtering/search are saved to so as to preserve
@@ -37,7 +39,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
   
   constructor(recordingsService: RecordingsService, snackBar: MatSnackBar) {
     super(recordingsService, snackBar);
-    this.searchPlaceholder = this.recordingsService.fuzzyKeys(' and/or ') as string;
+    this.searchPlaceholder = this.recordingsService.fuzzyKeys(' and/or ', ['isrc']) as string;
   }
 
   /**
@@ -67,7 +69,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
     this.updateState(added$, 'Adding recording...');
     added$.subscribe(
       (recordings) => {
-        this.snackBar.open('Recording added. Showing all entries.', 'OK', {duration: SNACK_DELAY});
+        this.snackBar.open('Recording registered. Showing all entries.', 'OK', {duration: SNACK_DELAY});
         this.currRecordings = recordings;
       },
       (error) => {
