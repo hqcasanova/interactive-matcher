@@ -12,7 +12,7 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $interactive-matcher-primary: mat.define-palette(mat.$indigo-palette);
-$interactive-matcher-accent: mat.define-palette(mat.$pink-palette, 700);
+$interactive-matcher-accent: mat.define-palette(mat.$pink-palette, 500, 600, 700);
 
 // The warn palette is optional (defaults to red).
 $interactive-matcher-warn: mat.define-palette(mat.$red-palette);

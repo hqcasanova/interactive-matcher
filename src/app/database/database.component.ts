@@ -54,11 +54,6 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
     return fetched$;
   }
 
-  onSearch(query: string) {
-    const searched$ = this.recordingsService.fuzzySearch(this.recordings  || [], query);
-    this.updateState(searched$, "Searching...", 'currRecordings');
-  }
-
   /**
    * Notifies of progress and success/failure of adding a new recording to the list.
    * While at it, it updates the properties of this component. It also reflects the new state of the
@@ -72,18 +67,21 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
     this.updateState(added$, 'Adding recording...');
     added$.subscribe(
       (recordings) => {
-        this.snackBar.open("Recording added. Showing all entries.", "OK", {duration: SNACK_DELAY});
+        this.snackBar.open('Recording added. Showing all entries.', 'OK', {duration: SNACK_DELAY});
         this.currRecordings = recordings;
       },
       (error) => {
-        this.snackBar.open("There has been an error. The recording was not registered.", "OK");
+        this.snackBar.open('There has been an error. The recording was not registered.', 'OK');
       }
     );
   }
 
-  autoSearch(recording: Recording) {
-    const searched$ = this.recordingsService.fuzzySearch(this.recordings  || [], recording);
-    this.updateState(searched$, "Finding similar recordings...", 'currRecordings');
+  // TODO: dynamically change search field's value if query is a recording
+  // TODO: show chips for each search term on database header => get rid of dot hint and add "clear all"
+  // That should address the affordability problem of "see all".
+  search(query: string | Recording, message: string = 'Searching...') {
+    const searched$ = this.recordingsService.fuzzySearch(this.recordings  || [], query);
+    this.updateState(searched$, message, 'currRecordings');
   }
 
   seeAll() {

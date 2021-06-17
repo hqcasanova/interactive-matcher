@@ -14,7 +14,7 @@
           color="accent"
           disableRipple>
           <mat-icon aria-hidden="false" aria-label="Dot"
-            [style.visibility]="search.query ? 'visible' : 'hidden'"
+            [style.visibility]="searchField.query ? 'visible' : 'hidden'"
             color="primary">
               fiber_manual_record
           </mat-icon>
@@ -25,8 +25,8 @@
 
     <search-field 
       [placeholder]="searchPlaceholder"
-      (lookup)="onSearch($event)"
-      #search>
+      (lookup)="search($event)"
+      #searchField>
     </search-field>
   </mat-expansion-panel>
 </mat-accordion>
