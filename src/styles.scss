@@ -11,7 +11,7 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$primary-palette: (
+$bmat-pink: (
   50 : #f8e8eb,
   100 : #edc5ce,
   200 : #e19eae,
@@ -44,7 +44,7 @@ $primary-palette: (
   )
 );
 
-$accent-palette: (
+$bmat-blue: (
   50 : #e0ecf5,
   100 : #b3d0e5,
   200 : #80b1d4,
@@ -77,8 +77,74 @@ $accent-palette: (
   )
 );
 
-$interactive-matcher-primary: mat.define-palette($primary-palette);
-$interactive-matcher-accent: mat.define-palette($accent-palette);
+$spotify-green: (
+  50 : #e4faec,
+  100 : #bcf3cf,
+  200 : #8febb0,
+  300 : #62e390,
+  400 : #40dd78,
+  500 : #1ed760,
+  600 : #1ad358,
+  700 : #16cd4e,
+  800 : #12c744,
+  900 : #0abe33,
+  A100 : #e9ffed,
+  A200 : #b6ffc3,
+  A400 : #83ff9a,
+  A700 : #69ff85,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #000000,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$spotify-blue: (
+  50 : #e5e8f5,
+  100 : #bfc6e6,
+  200 : #94a0d5,
+  300 : #697ac4,
+  400 : #495eb8,
+  500 : #2941ab,
+  600 : #243ba4,
+  700 : #1f329a,
+  800 : #192a91,
+  900 : #0f1c80,
+  A100 : #b3baff,
+  A200 : #808bff,
+  A400 : #4d5dff,
+  A700 : #3346ff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$interactive-matcher-primary: mat.define-palette($bmat-pink);
+$interactive-matcher-accent: mat.define-palette($bmat-blue);
 
 // The warn palette is optional (defaults to red).
 $interactive-matcher-warn: mat.define-palette(mat.$red-palette);
@@ -144,4 +210,9 @@ h1, h2 {
 // Title-cases all field labels
 .mat-form-field-label:first-letter {
   text-transform: capitalize;
+}
+
+// Increase emphasis on snackbar's action button
+.mat-simple-snackbar-action .mat-button-wrapper {
+  color: var(--hyper-accent);
 }

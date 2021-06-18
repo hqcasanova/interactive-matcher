@@ -16,13 +16,17 @@
       &:hover {
         background: none;
       }
+
+      ::ng-deep .mat-expansion-indicator {
+        pointer-events: all;
+      }
     }
 
     .search-expand-wrapper {
       overflow: hidden;
       justify-content: space-between;
       margin-left: 8rem;
-      margin-right: .5rem;
+      margin-right: 0;
     }
 
     .top-btn {
@@ -30,6 +34,10 @@
       margin-top: .34rem;
       transition: margin .3s ease;
       pointer-events: all;
+
+      &.expand-btn {
+        padding-right: .5rem;
+      }
 
       &.search-chips {
         overflow: hidden;
