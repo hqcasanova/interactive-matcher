@@ -5,7 +5,7 @@
       Recordnise
     </span>
   </h1>
-  <span class="app-tagline">Interactive record matching</span>
+  <span class="app-tagline">Match recordings interactively</span>
   <span class="link-wrapper">
     <a class="source-link" href="https://github.com/hqcasanova/interactive-matcher" target="_blank"
       mat-raised-button>
@@ -16,7 +16,7 @@
 
 <app-inputs class="app-list" 
   [dataFile]="'sound_recordings_input_report.csv'"
-  (selection)="database.autoSearch($event)"
+  (selection)="database.search($event)"
   #inputs>
 </app-inputs>
 
@@ -29,5 +29,6 @@
 
 <app-database class="app-list" 
   [dataFile]="'sound_recordings.csv'"
+  [reference]="inputs.selected"
   #database>
 </app-database>

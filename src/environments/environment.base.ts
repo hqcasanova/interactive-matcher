@@ -19,7 +19,7 @@ export const environment = {
       },
       {
         name: 'artist',
-        weight: 0.8
+        weight: 0.7
       },
       {
         name: 'isrc',

@@ -8,7 +8,6 @@ import { Recording } from '../shared/recording.model';
 import { RecordingsService } from '../shared/recordings.service';
 
 const SNACK_DELAY = environment.snackbarDelay;
-const DEFAULT_FUZZY = environment.defaultFuzzy;
 
 @Component({
   selector: 'app-database',
@@ -16,9 +15,12 @@ const DEFAULT_FUZZY = environment.defaultFuzzy;
   styleUrls: ['../inputs/inputs.component.scss', './database.component.scss']
 })
 export class DatabaseComponent extends InputsComponent implements OnInit {
-  PLACEHOLDER: string = DEFAULT_FUZZY.keys.map(keyProps => keyProps.name).join(', ');
+  @Input() reference?: Recording;
+
+  searchPlaceholder: string = '';
+  searchQuery: string = '';
   
-  // Collection where the results of all operations of filtering/search are saved to so as to preserve
+  // Collection where the results of all filtering/search operations are saved to so as to preserve
   // the original copy.
   private _currRecordings?: Recording[];
   
@@ -38,6 +40,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
   
   constructor(recordingsService: RecordingsService, snackBar: MatSnackBar) {
     super(recordingsService, snackBar);
+    this.searchPlaceholder = this.recordingsService.fuzzyKeys(' and/or ', ['isrc']) as string;
   }
 
   /**
@@ -54,11 +57,6 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
     return fetched$;
   }
 
-  onSearch(query: string) {
-    const searched$ = this.recordingsService.fuzzySearch(this.recordings  || [], query);
-    this.updateState(searched$, "Searching...", 'currRecordings');
-  }
-
   /**
    * Notifies of progress and success/failure of adding a new recording to the list.
    * While at it, it updates the properties of this component. It also reflects the new state of the
@@ -72,21 +70,40 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
     this.updateState(added$, 'Adding recording...');
     added$.subscribe(
       (recordings) => {
-        this.snackBar.open("Recording added. Showing all entries.", "OK", {duration: SNACK_DELAY});
+        this.snackBar.open('Recording registered. Showing all entries.', 'OK', {duration: SNACK_DELAY});
         this.currRecordings = recordings;
       },
       (error) => {
-        this.snackBar.open("There has been an error. The recording was not registered.", "OK");
+        this.snackBar.open('There has been an error. The recording was not registered.', 'OK');
       }
     );
   }
 
-  autoSearch(recording: Recording) {
-    const searched$ = this.recordingsService.fuzzySearch(this.recordings  || [], recording);
-    this.updateState(searched$, "Finding similar recordings...", 'currRecordings');
+  /**
+   * Triggers a fuzzy search given a query or a recording. In the latter case, the values are joined
+   * into the query string. Auto-matching effectively becomes a specific search, thus helping expose
+   * its corresponding list state more explicitly to the end-user.
+   * @param query - String being searched for.
+   * @param message - Text shown while waiting for the retrieval of search results.
+   */
+  search(query: string | Recording, message: string = 'Searching...') {
+    const searched$ = this.recordingsService.fuzzySearch(this.recordings  || [], query);
+    let fuzzyKeys;
+    
+    if (typeof query === 'string') {
+      this.searchQuery = query;
+    } else {
+      fuzzyKeys = this.recordingsService.fuzzyKeys() as string[];
+      this.searchQuery = this.recordingsService.serialise(query, fuzzyKeys);
+    }
+    this.updateState(searched$, message, 'currRecordings');
   }
 
-  seeAll() {
+  /**
+   * Resets the state of the component, rendering the full list of database recordings.
+   */
+  reset() {
     this.currRecordings = this.recordings;
+    this.searchQuery = '';
   }
 }

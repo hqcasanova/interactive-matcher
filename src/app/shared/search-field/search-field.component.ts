@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'search-field',
@@ -11,10 +12,15 @@ export class SearchFieldComponent implements OnInit {
 
   // Avoids overlapping the non-standard "search" event
   @Output() lookup = new EventEmitter<string>();
+  @ViewChild('searchInput') searchInput!: MatInput;
 
   constructor() { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
+  }
+
+  focus() {
+    this.searchInput.focus();
   }
 
   onSearch(event: Event) {

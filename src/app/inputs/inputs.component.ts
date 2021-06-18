@@ -69,10 +69,10 @@ export class InputsComponent implements OnInit {
     this.updateState(removed$, 'Removing matched recording...');
     removed$.subscribe(
       () => {
-        this.snackBar.open("Recording removed from unmatched list", "OK", {duration: SNACK_DELAY});
+        this.snackBar.open('Recording removed from unmatched list', 'OK', {duration: SNACK_DELAY});
       },
       (error) => {
-        this.snackBar.open("There has been an error. The recording was not removed", "OK");
+        this.snackBar.open('There has been an error. The recording was not removed', 'OK');
       }
     );
   }

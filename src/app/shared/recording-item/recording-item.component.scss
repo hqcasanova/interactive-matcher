@@ -1,5 +1,9 @@
 .recording-item {
   margin: 1.25rem 0;
+
+  .highlight {
+    background: var(--hyper-accent-lighter);
+  }
   
   .recording-artist {
     font-size: 1rem;

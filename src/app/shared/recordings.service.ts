@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { of, Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Papa } from 'ngx-papaparse';
-import { isEmpty, isEqual, orderBy, pick } from 'lodash-es';
+import { isEmpty, orderBy, pick } from 'lodash-es';
 import Fuse from 'fuse.js';
 
 import { Recording } from './recording.model';
@@ -105,6 +105,35 @@ export class RecordingsService {
   }
 
   /**
+   * Converts the keys in the fuzzy search configuration options into their respective names or
+   * a serialised version using commas and a given conjunction (as in a human-readable list). In
+   * both cases, keys are listed by descending weight order.
+   * @param [lastConjunction = ''] - Conjunction to be used in the human-readable version. If none
+   * given, the serialisation is skipped.
+   * @param toUppercase - Array of key names that should be converted to all uppercase.
+   * @returns An ennumeration list of key names or an array thereof.
+   */
+   fuzzyKeys(lastConjunction: string = '', toUppercase: string[] = ['']): string[] | string {
+    const keysByWeight = orderBy(DEFAULT_FUZZY.keys, 'weight', 'desc');
+    const keyArray = keysByWeight.map(keyProps => {
+      if (toUppercase.indexOf(keyProps.name) > -1) {
+        return keyProps.name.toUpperCase();
+      } else {
+        return keyProps.name;
+      }
+    });
+
+    // Adds the conjunction only at the end
+    if (lastConjunction) {
+      return keyArray.reduce((a, b, i, array) => {
+        return a + (i < array.length - 1 ? ', ' : lastConjunction) + b;
+      });
+    }
+
+    return keyArray;
+  }
+
+  /**
    * Performs a fuzzy search on a set of recordings either with a serialised string version of a given 
    * recording or a plain string. After that, the recordings' order is re-balanced in terms of their
    * durations. This is mainly due to the numeric nature of the duration, which does not lend itself to
@@ -121,7 +150,6 @@ export class RecordingsService {
   ): Observable<Recording[]> {
     try {
       const fuse = new Fuse(collection, {...options, includeScore: true});
-      let fuzzyKeys;
       let recordings;
 
       // Query passed in directly => leaves collection intact if empty string
@@ -132,13 +160,16 @@ export class RecordingsService {
           return of(collection);
         }
 
-      // Recording passed in => serialise only values for keys set in fuzzy options and re-balance by duration
+      // Recording passed in => serialises only values for keys in fuzzy options and re-balances by duration
       } else {
-        fuzzyKeys = options.keys.map((keyProps: any) => keyProps.name);
+        const fuzzyKeys = this.fuzzyKeys() as string[];
+
         recordings = fuse.search(this.serialise(query, fuzzyKeys));
-        recordings = this.sortDurationDiff(recordings, query.duration);
+        if (fuzzyKeys.indexOf('duration') === -1) {
+          recordings = this.sortDurationDiff(recordings, query.duration);
+        }
       }
-      
+     
       // By default, fuzzy results items are nested under an "item" property
       recordings = recordings.map(result => result.item);
       return of(recordings);
@@ -153,7 +184,7 @@ export class RecordingsService {
    * reference recording's duration. Bubbling only takes place if the scores are roughly similar or 
    * if the reference recording has no duration, setting it to zero by default. If a database
    * recording has no duration either and comes on top after the fuzzy search, it makes it equal to the 
-   * reference's duration + 1 so that only a recording very similar duration can replace it at the top.
+   * reference's duration + 1 so that only a recording with a very similar duration can replace it at the top.
    * Note that fuzzy scores are based on Levenshtein distances: the lower the figure, the higher the score 
    * really.
    * @param collection - Results from fuzzy search with scores.
@@ -164,25 +195,25 @@ export class RecordingsService {
     collection: Fuse.FuseResult<Recording>[], 
     duration: string
   ): Fuse.FuseResult<Recording>[] {
-    const iDuration = parseInt(duration || '0');
+    const recDuration = parseInt(duration || '0');
     let cloneDiff;
     
     // Clones the original results while converting durations to integers and calculating their differences.
     cloneDiff = collection.map((result, i) => {
-      const defaultDur = i === 0 ? iDuration + 1 : 0;
-      const durationInt = parseInt(result.item.duration || defaultDur.toString());
-      const durationDiff = Math.abs(durationInt - iDuration);
+      const defaultDur = i === 0 ? recDuration + 1 : 0;
+      const iDuration = parseInt(result.item.duration || defaultDur.toString());
+      const durationDiff = Math.abs(iDuration - recDuration);
 
       // Scores are rounded to avoid treating negligible score differences as meaningful.
       return Object.assign({}, result, {
         diff: durationDiff,
-        score: result.score ? Math.round(result.score) : 0
+        score: result.score ? Math.round((result.score + Number.EPSILON) * 100) / 100 : 0
       });
     });
 
     // Bubbles up durations similar to the reference recording's whenever scores are also similar. 
     return cloneDiff.sort((a, b) => {
-      if (a.score === b.score) {
+      if (Math.abs(a.score - b.score) < 0.16) {
         return a.diff - b.diff;
       } else {
         return 0;
@@ -197,7 +228,7 @@ export class RecordingsService {
    * @returns String of property values. If an empty or no recording is passed in, an empty
    * string is returned.
    */
-  private serialise(
+  serialise(
     recording: Recording | undefined, 
     properties: string[] = ['title', 'artist', 'isrc', 'duration']
   ): string {

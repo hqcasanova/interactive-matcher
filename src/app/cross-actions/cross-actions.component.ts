@@ -21,7 +21,7 @@ export class CrossActionsComponent implements OnInit {
     if (this.isSelInput) {
       this.registration.emit();
     } else {
-      this.snackBar.open("Please select an input recording first", "OK");
+      this.snackBar.open('Please select an unmatched recording first', 'OK');
     }
   }
 
@@ -29,7 +29,7 @@ export class CrossActionsComponent implements OnInit {
     if (this.isSelInput && this.isSelDatabase) {
       this.matching.emit();
     } else {
-      this.snackBar.open("Please select an input and a registered recording first", "OK");
+      this.snackBar.open('Please select an unmatched and a registered recording first', 'OK');
     }
   }
 }

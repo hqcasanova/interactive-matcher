@@ -9,7 +9,7 @@
     width: 100%;
     z-index: 100;
     color: #fafafa;
-    background: #c74d61;
+    background: var(--primary);
     justify-content: space-between;
 
     .app-logo {
@@ -27,8 +27,8 @@
 
     .app-tagline {
       display: none;
-      font-weight: 300;
-      color: #000;
+      font-weight: 400;
+      color: #fafafa;
     }
   }
 

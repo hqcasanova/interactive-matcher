@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatFormFieldModule,
     MatSnackBarModule,
     MatExpansionModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatChipsModule
   ],
   exports: [
     RecordingListComponent,
@@ -45,7 +47,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatButtonModule,
     MatSnackBarModule,
     MatExpansionModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatChipsModule
   ]
 })
 export class SharedModule { }
