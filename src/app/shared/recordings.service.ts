@@ -228,7 +228,7 @@ export class RecordingsService {
    * @returns String of property values. If an empty or no recording is passed in, an empty
    * string is returned.
    */
-  private serialise(
+  serialise(
     recording: Recording | undefined, 
     properties: string[] = ['title', 'artist', 'isrc', 'duration']
   ): string {

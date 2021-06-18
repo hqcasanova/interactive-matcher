@@ -134,6 +134,7 @@ h1, h2 {
   --hyper-accent: #e7ae2f;
   --hyper-accent-light: #{lighten(#e7ae2f, 20%)};
   --hyper-accent-lighter: #{lighten(#e7ae2f, 30%)};
+  --hyper-accent-dark: #{darken(#e7ae2f, 20%)};
 
   --error: #{map-get($interactive-matcher-warn, 500)};
   --error-light: #{map-get($interactive-matcher-warn, 200)};

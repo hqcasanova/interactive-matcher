@@ -1,29 +1,31 @@
 <h2 class="mat-display-1">Registered</h2>
 
 <mat-accordion>
-  <mat-expansion-panel>
+  <mat-expansion-panel (afterExpand)="searchField.focus()">
     <mat-expansion-panel-header>
       <mat-panel-description class="search-expand-wrapper">
-        <button class="top-btn seeall-btn" mat-flat-button aria-label="See all recordings"
-          [style.visibility]="(recordings || []).length > (currRecordings || []).length ? 'visible' : 'hidden'"
-          disableRipple
-          (click)="seeAll(); $event.stopPropagation()">
-          View all
-        </button>
+        <mat-chip-list class="top-btn search-chips" aria-label="Search status"
+          [selectable]="false">
+          <mat-chip class="search-chip"
+            disableRipple
+            *ngIf="searchQuery.length"
+            [removable]="true"
+            (removed)="reset()">
+            <div class="chip-text">{{ searchQuery }}</div>
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+        
         <button class="top-btn" mat-icon-button aria-label="expand button for search field"
           color="accent"
           disableRipple>
-          <mat-icon aria-hidden="false" aria-label="Dot"
-            [style.visibility]="searchField.query ? 'visible' : 'hidden'"
-            color="primary">
-              fiber_manual_record
-          </mat-icon>
           Search
         </button>
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-    <search-field 
+    <search-field
+      [query]="searchQuery"
       [placeholder]="searchPlaceholder"
       (lookup)="search($event)"
       #searchField>

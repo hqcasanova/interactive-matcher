@@ -25,11 +25,11 @@
         height: auto !important;
         border-radius: .5rem;
       
-        &.selected-option, &:focus {
+        &.selected-option {
           background: var(--primary-light);
         }
   
-        &:hover:not(.selected-option) {
+        &:hover:not(.selected-option):not(:focus), &:focus {
           background: var(--primary-lighter);
         }
       }

@@ -18,8 +18,9 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
   @Input() reference?: Recording;
 
   searchPlaceholder: string = '';
+  searchQuery: string = '';
   
-  // Collection where the results of all operations of filtering/search are saved to so as to preserve
+  // Collection where the results of all filtering/search operations are saved to so as to preserve
   // the original copy.
   private _currRecordings?: Recording[];
   
@@ -78,15 +79,31 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
     );
   }
 
-  // TODO: dynamically change search field's value if query is a recording
-  // TODO: show chips for each search term on database header => get rid of dot hint and add "clear all"
-  // That should address the affordability problem of "see all".
+  /**
+   * Triggers a fuzzy search given a query or a recording. In the latter case, the values are joined
+   * into the query string. Auto-matching effectively becomes a specific search, thus helping expose
+   * its corresponding list state more explicitly to the end-user.
+   * @param query - String being searched for.
+   * @param message - Text shown while waiting for the retrieval of search results.
+   */
   search(query: string | Recording, message: string = 'Searching...') {
     const searched$ = this.recordingsService.fuzzySearch(this.recordings  || [], query);
+    let fuzzyKeys;
+    
+    if (typeof query === 'string') {
+      this.searchQuery = query;
+    } else {
+      fuzzyKeys = this.recordingsService.fuzzyKeys() as string[];
+      this.searchQuery = this.recordingsService.serialise(query, fuzzyKeys);
+    }
     this.updateState(searched$, message, 'currRecordings');
   }
 
-  seeAll() {
+  /**
+   * Resets the state of the component, rendering the full list of database recordings.
+   */
+  reset() {
     this.currRecordings = this.recordings;
+    this.searchQuery = '';
   }
 }

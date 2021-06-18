@@ -1,8 +1,8 @@
 <mat-form-field class="search-field" color="accent">
-  <input matInput
+  <input type="search" matInput
     [(ngModel)]="query"
-    type="search"
-    (keyup.enter)="onSearch($event)">
+    (keyup.enter)="onSearch($event)"
+    #searchInput="matInput">
   <mat-label>{{ placeholder }}</mat-label>
   <button matSuffix mat-icon-button aria-label="Search" (click)="onSearch($event)" color="accent">
     <mat-icon>search</mat-icon>
