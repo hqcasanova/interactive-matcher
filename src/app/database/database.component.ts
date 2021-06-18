@@ -21,7 +21,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
   searchQuery: string = '';
   
   // Collection where the results of all filtering/search operations are saved to so as to preserve
-  // the original copy.
+  // the original copy. The collection inherited from the parent effectively caches the original recordings list.
   private _currRecordings?: Recording[];
   
   /**

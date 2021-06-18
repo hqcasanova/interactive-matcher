@@ -11,7 +11,7 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$primary-palette: (
+$bmat-pink: (
   50 : #f8e8eb,
   100 : #edc5ce,
   200 : #e19eae,
@@ -44,7 +44,7 @@ $primary-palette: (
   )
 );
 
-$accent-palette: (
+$bmat-blue: (
   50 : #e0ecf5,
   100 : #b3d0e5,
   200 : #80b1d4,
@@ -77,8 +77,108 @@ $accent-palette: (
   )
 );
 
-$interactive-matcher-primary: mat.define-palette($primary-palette);
-$interactive-matcher-accent: mat.define-palette($accent-palette);
+$bmat-yellow: (
+  50 : #fcf5e6,
+  100 : #f8e7c1,
+  200 : #f3d797,
+  300 : #eec66d,
+  400 : #ebba4e,
+  500 : #e7ae2f,
+  600 : #e4a72a,
+  700 : #e09d23,
+  800 : #dd941d,
+  900 : #d78412,
+  A100 : #ffffff,
+  A200 : #ffebd2,
+  A400 : #ffd39f,
+  A700 : #ffc885,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #000000,
+    900 : #000000,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$spotify-green: (
+  50 : #e2efe7,
+  100 : #b8d7c3,
+  200 : #88bd9b,
+  300 : #58a273,
+  400 : #358e55,
+  500 : #117a37,
+  600 : #0f7231,
+  700 : #0c672a,
+  800 : #0a5d23,
+  900 : #054a16,
+  A100 : #7fff95,
+  A200 : #4cff6b,
+  A400 : #19ff41,
+  A700 : #00fe2c,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$spotify-blue: (
+  50 : #e5e8f5,
+  100 : #bfc6e6,
+  200 : #94a0d5,
+  300 : #697ac4,
+  400 : #495eb8,
+  500 : #2941ab,
+  600 : #243ba4,
+  700 : #1f329a,
+  800 : #192a91,
+  900 : #0f1c80,
+  A100 : #b3baff,
+  A200 : #808bff,
+  A400 : #4d5dff,
+  A700 : #3346ff,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #ffffff,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #ffffff,
+    A700 : #ffffff,
+  )
+);
+
+$interactive-matcher-primary: mat.define-palette($bmat-pink);
+$interactive-matcher-accent: mat.define-palette($bmat-blue);
+$interactive-matcher-hyperaccent: mat.define-palette($bmat-yellow);
 
 // The warn palette is optional (defaults to red).
 $interactive-matcher-warn: mat.define-palette(mat.$red-palette);
@@ -131,10 +231,10 @@ h1, h2 {
   --accent-lighter: #{map-get($interactive-matcher-accent, 50)};
   --accent-dark: #{map-get($interactive-matcher-accent, 700)};
   
-  --hyper-accent: #e7ae2f;
-  --hyper-accent-light: #{lighten(#e7ae2f, 20%)};
-  --hyper-accent-lighter: #{lighten(#e7ae2f, 30%)};
-  --hyper-accent-dark: #{darken(#e7ae2f, 20%)};
+  --hyper-accent: #{map-get($interactive-matcher-hyperaccent, 500)};
+  --hyper-accent-light: #{map-get($interactive-matcher-hyperaccent, 300)};
+  --hyper-accent-lighter: #{map-get($interactive-matcher-hyperaccent, 100)};
+  --hyper-accent-dark: #{map-get($interactive-matcher-hyperaccent, 700)};
 
   --error: #{map-get($interactive-matcher-warn, 500)};
   --error-light: #{map-get($interactive-matcher-warn, 200)};
@@ -144,4 +244,9 @@ h1, h2 {
 // Title-cases all field labels
 .mat-form-field-label:first-letter {
   text-transform: capitalize;
+}
+
+// Increase emphasis on snackbar's action button
+.mat-simple-snackbar-action .mat-button-wrapper {
+  color: var(--hyper-accent-light);
 }

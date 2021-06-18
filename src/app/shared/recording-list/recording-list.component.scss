@@ -29,8 +29,10 @@
           background: var(--primary-light);
         }
   
-        &:hover:not(.selected-option):not(:focus), &:focus {
-          background: var(--primary-lighter);
+        &:not(.selected-option) {
+          &:hover, &:focus {
+            background: var(--primary-lighter);
+          }
         }
       }
     }
