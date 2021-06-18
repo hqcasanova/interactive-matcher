@@ -77,21 +77,21 @@ $bmat-blue: (
   )
 );
 
-$spotify-green: (
-  50 : #e4faec,
-  100 : #bcf3cf,
-  200 : #8febb0,
-  300 : #62e390,
-  400 : #40dd78,
-  500 : #1ed760,
-  600 : #1ad358,
-  700 : #16cd4e,
-  800 : #12c744,
-  900 : #0abe33,
-  A100 : #e9ffed,
-  A200 : #b6ffc3,
-  A400 : #83ff9a,
-  A700 : #69ff85,
+$bmat-yellow: (
+  50 : #fcf5e6,
+  100 : #f8e7c1,
+  200 : #f3d797,
+  300 : #eec66d,
+  400 : #ebba4e,
+  500 : #e7ae2f,
+  600 : #e4a72a,
+  700 : #e09d23,
+  800 : #dd941d,
+  900 : #d78412,
+  A100 : #ffffff,
+  A200 : #ffebd2,
+  A400 : #ffd39f,
+  A700 : #ffc885,
   contrast: (
     50 : #000000,
     100 : #000000,
@@ -102,6 +102,39 @@ $spotify-green: (
     600 : #000000,
     700 : #000000,
     800 : #000000,
+    900 : #000000,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  )
+);
+
+$spotify-green: (
+  50 : #e2efe7,
+  100 : #b8d7c3,
+  200 : #88bd9b,
+  300 : #58a273,
+  400 : #358e55,
+  500 : #117a37,
+  600 : #0f7231,
+  700 : #0c672a,
+  800 : #0a5d23,
+  900 : #054a16,
+  A100 : #7fff95,
+  A200 : #4cff6b,
+  A400 : #19ff41,
+  A700 : #00fe2c,
+  contrast: (
+    50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
     900 : #ffffff,
     A100 : #000000,
     A200 : #000000,
@@ -145,6 +178,7 @@ $spotify-blue: (
 
 $interactive-matcher-primary: mat.define-palette($bmat-pink);
 $interactive-matcher-accent: mat.define-palette($bmat-blue);
+$interactive-matcher-hyperaccent: mat.define-palette($bmat-yellow);
 
 // The warn palette is optional (defaults to red).
 $interactive-matcher-warn: mat.define-palette(mat.$red-palette);
@@ -197,10 +231,10 @@ h1, h2 {
   --accent-lighter: #{map-get($interactive-matcher-accent, 50)};
   --accent-dark: #{map-get($interactive-matcher-accent, 700)};
   
-  --hyper-accent: #e7ae2f;
-  --hyper-accent-light: #{lighten(#e7ae2f, 20%)};
-  --hyper-accent-lighter: #{lighten(#e7ae2f, 30%)};
-  --hyper-accent-dark: #{darken(#e7ae2f, 20%)};
+  --hyper-accent: #{map-get($interactive-matcher-hyperaccent, 500)};
+  --hyper-accent-light: #{map-get($interactive-matcher-hyperaccent, 300)};
+  --hyper-accent-lighter: #{map-get($interactive-matcher-hyperaccent, 100)};
+  --hyper-accent-dark: #{map-get($interactive-matcher-hyperaccent, 700)};
 
   --error: #{map-get($interactive-matcher-warn, 500)};
   --error-light: #{map-get($interactive-matcher-warn, 200)};
@@ -214,5 +248,5 @@ h1, h2 {
 
 // Increase emphasis on snackbar's action button
 .mat-simple-snackbar-action .mat-button-wrapper {
-  color: var(--hyper-accent);
+  color: var(--hyper-accent-light);
 }
