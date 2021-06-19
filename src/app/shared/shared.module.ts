@@ -2,9 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { RecordingItemComponent } from './recording-item/recording-item.component';
-import { RecordingListComponent } from './recording-list/recording-list.component';
-import { SearchFieldComponent } from './search-field/search-field.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
@@ -16,12 +13,19 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialogModule } from '@angular/material/dialog';
+
+import { RecordingItemComponent } from './recording-item/recording-item.component';
+import { RecordingListComponent } from './recording-list/recording-list.component';
+import { SearchFieldComponent } from './search-field/search-field.component';
+import { ConfirmDialogueComponent } from './confirm-dialogue/confirm-dialogue.component';
 
 @NgModule({
   declarations: [
     RecordingItemComponent,
     RecordingListComponent,
-    SearchFieldComponent
+    SearchFieldComponent,
+    ConfirmDialogueComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +41,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatSnackBarModule,
     MatExpansionModule,
     MatToolbarModule,
-    MatChipsModule
+    MatChipsModule,
+    MatDialogModule
   ],
   exports: [
     RecordingListComponent,

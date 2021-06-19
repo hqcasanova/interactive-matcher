@@ -221,6 +221,19 @@ export class RecordingsService {
     });
   }
 
+  hasRecording(collection: Recording[], recording: Recording | undefined): Observable<boolean> {
+    try {
+      if (!recording || isEmpty(recording) || !recording.isrc) {
+        return of(false);
+      }
+      
+      return of(collection.some(item => item.isrc === recording.isrc));
+
+      } catch(error) {
+        return throwError(error);
+      }
+  }
+
   /**
    * Convenience method to turn a given recording into a string of all its property values.
    * @param recording - Object representative of the recording.
