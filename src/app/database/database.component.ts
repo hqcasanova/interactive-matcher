@@ -71,7 +71,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
     added$.subscribe(
       (recordings) => {
         this.snackBar.open('Recording registered. Showing all entries.', 'OK', {duration: SNACK_DELAY});
-        this.currRecordings = recordings;
+        this.reset();
       },
       (error) => {
         this.snackBar.open('There has been an error. The recording was not registered.', 'OK');
@@ -100,7 +100,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
   }
 
   /**
-   * Resets the state of the component, rendering the full list of database recordings.
+   * Resets the state of the list, rendering all of the database recordings.
    */
   reset() {
     this.currRecordings = this.recordings;

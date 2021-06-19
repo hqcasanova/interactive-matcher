@@ -15,11 +15,11 @@ export const environment = {
     keys: [
       {
         name: 'title',
-        weight: 0.8
+        weight: 0.9
       },
       {
         name: 'artist',
-        weight: 0.7
+        weight: 0.8
       },
       {
         name: 'isrc',
@@ -30,5 +30,5 @@ export const environment = {
   },
 
   // Time in milliseconds before notifications are auto-dismissed, if at all.
-  snackbarDelay: 3000
+  snackbarDelay: 4000
 };
