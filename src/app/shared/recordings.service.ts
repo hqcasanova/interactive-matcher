@@ -221,6 +221,14 @@ export class RecordingsService {
     });
   }
 
+  /**
+   * Checks if a given recording's ISRC is already in use by other recordings in the collection.
+   * Effectively, it tests the ideal uniquess of the recording provided.
+   * @param collection - Collection of recordings.
+   * @param recording - Recording to look for.
+   * @returns Observable with true if a recording with the same ISRC is found. False if not there,
+   * was not provided in the first place or has no ISRC.
+   */
   hasRecording(collection: Recording[], recording: Recording | undefined): Observable<boolean> {
     try {
       if (!recording || isEmpty(recording) || !recording.isrc) {

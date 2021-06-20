@@ -30,5 +30,6 @@
 <app-database class="app-list" 
   [dataFile]="'sound_recordings.csv'"
   [reference]="inputs.selected"
+  (registered)="inputs.deselectAll()"
   #database>
 </app-database>

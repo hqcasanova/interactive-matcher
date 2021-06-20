@@ -48,6 +48,7 @@
           overflow: hidden;
           background: transparent;
           border: 1px solid var(--accent);
+          pointer-events: none;
 
           .chip-text {
             overflow: hidden;
@@ -59,6 +60,7 @@
           .mat-icon {
             opacity: .7;
             color: var(--accent);
+            pointer-events: all;
 
             &:hover {
               opacity: 1;

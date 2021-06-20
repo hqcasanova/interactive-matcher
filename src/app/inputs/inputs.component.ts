@@ -11,6 +11,9 @@ import { RecordingsService } from '../shared/recordings.service';
 const DATA_FOLDER = environment.dataFolder;
 const SNACK_DELAY = environment.snackbarDelay;
 
+// This component assumes a list allowing only one selected item at a time.
+// TODO: maybe pass in current DB list and use change detection on it to generalise this list's update ops.
+// eg: not highlighting ISRC of selected recording if no other DB/input recording exists with the same ISRC
 @Component({
   selector: 'app-inputs',
   templateUrl: './inputs.component.html',
@@ -28,7 +31,7 @@ export class InputsComponent implements OnInit {
   error: string = '';
 
   /**
-   * Deselects any recording on changes in the recordings collection
+   * Deselects any recordings no longer present in the changed recordings collection
    */
   private _recordings?: Recording[];
   get recordings(): Recording[] | undefined {
