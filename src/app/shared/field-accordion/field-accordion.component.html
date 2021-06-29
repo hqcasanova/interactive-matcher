@@ -1,0 +1,28 @@
+<mat-accordion>
+  <mat-expansion-panel (afterExpand)="onAfterExpand()">
+    <mat-expansion-panel-header>
+      <mat-panel-description class="search-expand-wrapper">
+        <mat-chip-list class="top-btn search-chips" aria-label="Search status"
+          [selectable]="false">
+          <mat-chip class="search-chip"
+            disableRipple
+            *ngIf="fieldValue.length"
+            [removable]="true"
+            (removed)="onRemoved()">
+            <div class="chip-text">{{ fieldValue }}</div>
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+        
+        <button class="top-btn expand-btn" mat-icon-button aria-label="expand button for search field"
+          color="accent"
+          disableRipple>
+          {{ expandText }}
+        </button>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <ng-content></ng-content>
+
+  </mat-expansion-panel>
+</mat-accordion>

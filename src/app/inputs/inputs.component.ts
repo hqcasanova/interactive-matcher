@@ -1,14 +1,13 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { RecordingListComponent } from '../shared/recording-list/recording-list.component';
 import { Recording } from '../shared/recording.model';
-import { RecordingsService } from '../shared/recordings.service';
+import { RecordingsService } from './recordings.service';
 
-const DATA_FOLDER = environment.dataFolder;
 const SNACK_DELAY = environment.snackbarDelay;
 
 // This component assumes a list allowing only one selected item at a time.
@@ -25,25 +24,14 @@ export class InputsComponent implements OnInit {
 
   @ViewChild(RecordingListComponent) recordingList!: RecordingListComponent;
   
+  // Acts as a cached copy of the original recordings list. Useful when filtering.
+  recordings?: Recording[];
+
+  recordings$!: Observable<Recording[]>;
   selected?: Recording;
   isLoading: boolean = false;
   loadMessage: string = '';
   error: string = '';
-
-  /**
-   * Deselects any recordings no longer present in the changed recordings collection
-   */
-  private _recordings?: Recording[];
-  get recordings(): Recording[] | undefined {
-    return this._recordings;
-  }
-  set recordings(newValue: Recording[] | undefined) {
-    this._recordings = newValue;
-
-    if (this._recordings && this.selected && this._recordings.indexOf(this.selected) === -1) {
-      this.deselectAll();
-    }
-  }
 
   constructor(
     protected recordingsService: RecordingsService,
@@ -55,10 +43,13 @@ export class InputsComponent implements OnInit {
    * @returns Observable with collection of recordings.
    */
   ngOnInit(): Observable<Recording[]> {
-    const fetched$ = this.recordingsService.fetch(DATA_FOLDER + this.dataFile);
-    this.updateState(fetched$, 'Fetching recordings...');
+    const fetched$ = this.recordingsService.load(this.dataFile);
+    
+    this.recordings$ = this.updateState(fetched$, 'Fetching recordings...').pipe(
+      tap(recordings => this.recordings = recordings)
+    );
 
-    return fetched$;
+    return this.recordings$;
   }
 
   /**
@@ -67,56 +58,71 @@ export class InputsComponent implements OnInit {
    * @param recording - Item to be matched with and removed.
    */
   onMatch(recording?: Recording) {
-    const removed$ = this.recordingsService.remove(this.recordings || [], recording);
+    const removed$ = this.recordingsService.remove(recording);
     
-    this.updateState(removed$, 'Removing matched recording...');
-    removed$.subscribe(
-      () => {
-        this.snackBar.open('Recording removed from unmatched list', 'OK', {duration: SNACK_DELAY});
-      },
-      (error) => {
+    this.recordings$ = this.updateState(removed$, 'Removing matched recording...').pipe(
+      
+      //TODO: use actionable text to expose error thrown in a modal
+      catchError(error => {
         this.snackBar.open('There has been an error. The recording was not removed', 'OK');
-      }
+        return throwError(error);
+      }),
+
+      tap(recordings => {
+        this.recordings = recordings;
+        this.snackBar.open('Recording removed from unmatched list', 'OK', {duration: SNACK_DELAY});
+      })
     );
   }
+
+  /**
+   * Deselects any recordings no longer present in the changed recordings collection. Otherwise,
+   * the "select" property may still hold a selection that no longer applies, potentially allowing
+   * operations that shouldn't happen if they depend on that selection.
+   * @param currRecordings - Changed collection.
+   */
+  onRecordingsChange(currRecordings: Recording[]) {
+    if (this.selected && this.recordings?.indexOf(this.selected) === -1) {
+      this.deselectAll();
+    }
+  }
+
 
   onSelection(recording: Recording) {
     this.selected = recording;
     this.selection.emit(recording);
   }
 
+  
   deselectAll() {
     this.recordingList.deselectAll();
     this.selected = undefined;
   }
 
+  
   /**
-   * Reflects the state of the data transaction in terms of component property values.
+   * Reflects the loading state of the data transaction.
    * @param obs - Observable from async data transaction.
    * @param message - Explanatory string of waiting/loading state before transaction's completion.
-   * @param [collectionName = 'recordings'] - Name of the collection to be updated with new recording data.
    */
-  updateState(ob$: Observable<Recording[]>, message: string, collectionName: string = 'recordings') {
+  updateState(ob$: Observable<Recording[]>, message: string): Observable<any> {
     this.isLoading = true;
     this.loadMessage = message;
 
-    ob$.pipe(
-      finalize(() => {
-        this.isLoading = false;
-        this.loadMessage = '';
-      })
-    ).subscribe(
-      recordings => {
-        this.error = '';
-        (this as any)[collectionName] = recordings;
-      },
-      error => {
-        if (typeof error === 'string') {
+    return ob$.pipe(
+      catchError(error => {
+        if (typeof error === 'string' || error.toString) {
           this.error = error;
         } else {
           this.error = JSON.stringify(error);
         }
-      }
+        return throwError(this.error);
+      }),
+
+      finalize(() => {
+        this.isLoading = false;
+        this.loadMessage = '';
+      })
     );
   }
 }

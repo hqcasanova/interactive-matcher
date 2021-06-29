@@ -1,0 +1,42 @@
+.header-wrapper {
+  color: #fafafa;
+  background: var(--primary);
+  justify-content: space-between;
+
+  .app-logo {
+    width: auto;
+    height: auto;
+    font-size: 2.2em;
+    vertical-align: middle;
+  }
+
+  .app-name {
+    vertical-align: middle;
+    font-weight: 300;
+    font-size: 2rem;
+  }
+
+  .app-tagline {
+    display: none;
+    font-weight: 400;
+    color: #fafafa;
+  }
+
+  @media (min-width: 1024px) {
+    .app-branding {
+      flex: 1;
+    }
+    
+    .app-tagline {
+      display: block;
+    }
+
+    .link-wrapper {
+      flex: 1;
+      
+      .source-link {
+        float: right;
+      }
+    }
+  }
+}

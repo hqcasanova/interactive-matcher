@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,17 +18,22 @@ import { RecordingItemComponent } from './recording-item/recording-item.componen
 import { RecordingListComponent } from './recording-list/recording-list.component';
 import { SearchFieldComponent } from './search-field/search-field.component';
 import { ConfirmDialogueComponent } from './confirm-dialogue/confirm-dialogue.component';
+import { FieldAccordionComponent } from './field-accordion/field-accordion.component';
+import { SerialisePipe } from './serialise.pipe';
+import { EnumeratePipe } from './enumerate.pipe';
 
 @NgModule({
   declarations: [
     RecordingItemComponent,
     RecordingListComponent,
     SearchFieldComponent,
-    ConfirmDialogueComponent
+    ConfirmDialogueComponent,
+    FieldAccordionComponent,
+    SerialisePipe,
+    EnumeratePipe
   ],
   imports: [
     CommonModule,
-    HttpClientModule,
     FormsModule,
     MatCardModule,
     MatListModule,
@@ -44,7 +48,11 @@ import { ConfirmDialogueComponent } from './confirm-dialogue/confirm-dialogue.co
     MatChipsModule,
     MatDialogModule
   ],
+  providers: [
+    SerialisePipe
+  ],
   exports: [
+    CommonModule,
     RecordingListComponent,
     SearchFieldComponent,
     MatCardModule,
@@ -53,7 +61,10 @@ import { ConfirmDialogueComponent } from './confirm-dialogue/confirm-dialogue.co
     MatSnackBarModule,
     MatExpansionModule,
     MatToolbarModule,
-    MatChipsModule
+    MatChipsModule,
+    FieldAccordionComponent,
+    SerialisePipe,
+    EnumeratePipe
   ]
 })
 export class SharedModule { }

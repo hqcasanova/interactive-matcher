@@ -8,28 +8,6 @@
     left: 0;
     width: 100%;
     z-index: 100;
-    color: #fafafa;
-    background: var(--primary);
-    justify-content: space-between;
-
-    .app-logo {
-      width: auto;
-      height: auto;
-      font-size: 2.2em;
-      vertical-align: middle;
-    }
-
-    .app-name {
-      vertical-align: middle;
-      font-weight: 300;
-      font-size: 2rem;
-    }
-
-    .app-tagline {
-      display: none;
-      font-weight: 400;
-      color: #fafafa;
-    }
   }
 
   .app-list {
@@ -51,24 +29,6 @@
     left: 0;
     right: 0;
     padding: calc(64px + 1rem) 1rem 1rem;
-    
-    .app-header {
-      .app-branding {
-        flex: 1;
-      }
-      
-      .app-tagline {
-        display: block;
-      }
-
-      .link-wrapper {
-        flex: 1;
-        
-        .source-link {
-          float: right;
-        }
-      }
-    }
 
     .app-list {
       display: flex;

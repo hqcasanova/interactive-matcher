@@ -1,24 +1,24 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { SharedModule } from './shared/shared.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { InputsModule } from './inputs/inputs.module';
+import { DatabaseModule } from './database/database.module';
+import { CoreModule } from './core/core.module';
+import { CrossActionsModule } from './cross-actions/cross-actions.module';
 
 import { AppComponent } from './app.component';
-import { DatabaseComponent } from './database/database.component';
-import { InputsComponent } from './inputs/inputs.component';
-import { CrossActionsComponent } from './cross-actions/cross-actions.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    DatabaseComponent,
-    InputsComponent,
-    CrossActionsComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    SharedModule
+    InputsModule,
+    DatabaseModule,
+    CrossActionsModule,
+    CoreModule
   ],
   bootstrap: [AppComponent]
 })

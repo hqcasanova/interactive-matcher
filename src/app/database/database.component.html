@@ -1,45 +1,26 @@
 <h2 class="mat-display-1">Registered</h2>
 
-<mat-accordion>
-  <mat-expansion-panel (afterExpand)="searchField.focus()">
-    <mat-expansion-panel-header>
-      <mat-panel-description class="search-expand-wrapper">
-        <mat-chip-list class="top-btn search-chips" aria-label="Search status"
-          [selectable]="false">
-          <mat-chip class="search-chip"
-            disableRipple
-            *ngIf="searchQuery.length"
-            [removable]="true"
-            (removed)="reset()">
-            <div class="chip-text">{{ searchQuery }}</div>
-            <mat-icon matChipRemove>cancel</mat-icon>
-          </mat-chip>
-        </mat-chip-list>
-        
-        <button class="top-btn expand-btn" mat-icon-button aria-label="expand button for search field"
-          color="accent"
-          disableRipple>
-          Search
-        </button>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-
-    <search-field
-      [query]="searchQuery"
-      [placeholder]="searchPlaceholder"
-      (lookup)="search($event)"
-      #searchField>
-    </search-field>
-  </mat-expansion-panel>
-</mat-accordion>
+<field-accordion
+  [fieldValue]="searchQuery | serialise:fuzzyService.searchKeys"
+  [expandText]="'Search'"
+  (afterExpansion)="searchField.focus()"
+  (chipRemoval)="reset()">
+  <search-field
+    [query]="searchQuery | serialise:fuzzyService.searchKeys"
+    [placeholder]="fuzzyService.searchKeys | enumerate:' and/or ':['isrc']"
+    (lookup)="search($event)"
+    #searchField>
+  </search-field>
+</field-accordion>
 
 <recording-list
-  [recordings]="currRecordings"
+  [recordings]="currRecordings$ | async"
   [reference]="reference"
   [isLoading]="isLoading"
   [loadMessage]="loadMessage"
   [error]="error"
-  (selection)="onSelection($event)">
+  (selection)="onSelection($event)"
+  (recordingsChange)="onRecordingsChange($event)">
   <mat-card>
     <mat-card-title>
       <mat-icon aria-hidden="false" aria-label="Info icon">info</mat-icon>

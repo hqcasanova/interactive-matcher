@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, ViewChild, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, ViewChild, ElementRef, QueryList, ViewChildren, SimpleChanges } from '@angular/core';
 import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { Recording } from '../recording.model';
 
@@ -12,11 +12,12 @@ export class RecordingListComponent implements OnInit {
   // External recording against which recordings in this list may be compared to.
   @Input() reference?: Recording;
   
-  @Input() recordings?: Recording[];
+  @Input() recordings: Recording[] | null = null;
   @Input() error: string = '';
   @Input() isLoading: boolean = false;
   @Input() loadMessage: string = '';
   @Output() selection = new EventEmitter<Recording>();
+  @Output() recordingsChange = new EventEmitter<Recording[]>();
 
   @ViewChild(MatSelectionList) list!: MatSelectionList;
   @ViewChildren(MatListOption, { read: ElementRef }) optChildrenEls!: QueryList<ElementRef>
@@ -24,6 +25,17 @@ export class RecordingListComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  /**
+   * Notifies to the outside world that the list of recordings has changed.
+   */
+  ngOnChanges(changes: SimpleChanges): void {
+    const currRecordings = changes.recordings?.currentValue;
+
+    if (currRecordings) {
+      this.recordingsChange.emit(currRecordings);
+    }
   }
 
   /**

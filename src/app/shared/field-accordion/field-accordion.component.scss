@@ -1,0 +1,82 @@
+.mat-accordion {
+  display: block;
+
+  .mat-expansion-panel {
+    margin-top: -.35rem;
+    background: none;
+    box-shadow: none;
+
+    .mat-expansion-panel-header {
+      pointer-events: none;
+
+      &:hover {
+        background: none;
+      }
+
+      ::ng-deep .mat-expansion-indicator {
+        pointer-events: all;
+      }
+    }
+
+    .search-expand-wrapper {
+      overflow: hidden;
+      justify-content: space-between;
+      margin-left: 8rem;
+      margin-right: 0;
+    }
+
+    .top-btn {
+      width: auto;
+      margin-top: .34rem;
+      transition: margin .3s ease;
+      pointer-events: all;
+
+      &.expand-btn {
+        padding-right: .5rem;
+      }
+
+      &.search-chips {
+        overflow: hidden;
+        padding: .3rem 1rem 0;
+
+        .search-chip {
+          display: flex;
+          overflow: hidden;
+          background: transparent;
+          border: 1px solid var(--accent);
+          pointer-events: none;
+
+          .chip-text {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            font-weight: 400;
+          }
+
+          .mat-icon {
+            opacity: .7;
+            color: var(--accent);
+            pointer-events: all;
+
+            &:hover {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+    
+    &.mat-expanded {
+      margin-top: 0;
+      margin-bottom: -1rem;
+
+      .mat-expansion-panel-header {
+        height: 48px;
+      }
+
+      .top-btn {
+        margin-top: -.25rem;
+      }
+    }
+  }
+}
