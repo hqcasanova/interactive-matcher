@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 
 import { SharedModule } from '../shared/shared.module';
 import { InputsComponent } from './inputs.component';
-import { RecordingsService } from './recordings.service';
 
 @NgModule({
   declarations: [
@@ -11,9 +10,7 @@ import { RecordingsService } from './recordings.service';
   imports: [ 
     SharedModule 
   ],
-  providers: [
-    RecordingsService
-  ],
+  providers: [],
   exports: [
     InputsComponent
   ]

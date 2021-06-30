@@ -43,8 +43,7 @@ export class RecordingsService {
         }
 
         // With a remote API, the sorting here would likely have been done on the server-side.
-        this.collection = parsed;
-        return orderBy(parsed, sortOptions);
+        return this.collection = orderBy(parsed, sortOptions);
       })
     );
   }
@@ -97,7 +96,8 @@ export class RecordingsService {
         }
       }
 
-      return of(recordings.map(result => result.item));
+      // If the query was a recording, the score should be removed.
+      return of(recordings.map(result => result.item ? result.item : result));
 
     } catch(error) {
       return throwError(error);

@@ -17,7 +17,8 @@ const SNACK_DELAY = environment.snackbarDelay;
 @Component({
   selector: 'app-database',
   templateUrl: './database.component.html',
-  styleUrls: ['../inputs/inputs.component.scss', './database.component.scss']
+  styleUrls: ['../inputs/inputs.component.scss', './database.component.scss'],
+  providers: [ RecordingsService ]
 })
 export class DatabaseComponent extends InputsComponent implements OnInit {
   
@@ -27,9 +28,6 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
   @Output() registered = new EventEmitter<Recording>();
 
   @ViewChild(RecordingListComponent) listChild!: RecordingListComponent;
-
-  // Stream for filtered and unfiltered recordings.
-  currRecordings$: Observable<Recording[]> | undefined;
 
   searchQuery: string | Recording = '';
   
@@ -41,13 +39,6 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
   ) {
     super(recordingsService, snackBar);
-  }
-
-  /**
-   * Copies the original recordings collection as the current one so that it can be shown initally.
-   */
-  ngOnInit(): Observable<Recording[]> {
-    return this.currRecordings$ = super.ngOnInit();
   }
 
   /**
@@ -131,7 +122,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
     const searched$ = this.recordingsService.fuzzySearch(query);
 
     this.searchQuery = query;
-    this.currRecordings$ = this.updateState(searched$, message);
+    this.recordings$ = this.updateState(searched$, message);
   }
 
   /**
@@ -144,7 +135,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
     if (this.recordings) {
       obs$ = of(this.recordings);
     }
-    this.currRecordings$ = obs$;
+    this.recordings$ = obs$;
     this.searchQuery = '';
   }
 }

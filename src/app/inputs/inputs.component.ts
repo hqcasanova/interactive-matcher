@@ -16,7 +16,8 @@ const SNACK_DELAY = environment.snackbarDelay;
 @Component({
   selector: 'app-inputs',
   templateUrl: './inputs.component.html',
-  styleUrls: ['./inputs.component.scss']
+  styleUrls: ['./inputs.component.scss'],
+  providers: [ RecordingsService ]
 })
 export class InputsComponent implements OnInit {
   @Input() dataFile!: string;
@@ -27,7 +28,7 @@ export class InputsComponent implements OnInit {
   // Acts as a cached copy of the original recordings list. Useful when filtering.
   recordings?: Recording[];
 
-  recordings$!: Observable<Recording[]>;
+  recordings$: Observable<Recording[]> | undefined;
   selected?: Recording;
   isLoading: boolean = false;
   loadMessage: string = '';
@@ -40,16 +41,13 @@ export class InputsComponent implements OnInit {
 
   /**
    * Grabs the recordings' data as soon as the view is up and running and refreshes the latter's state.
-   * @returns Observable with collection of recordings.
    */
-  ngOnInit(): Observable<Recording[]> {
+  ngOnInit(): void {
     const fetched$ = this.recordingsService.load(this.dataFile);
     
     this.recordings$ = this.updateState(fetched$, 'Fetching recordings...').pipe(
       tap(recordings => this.recordings = recordings)
     );
-
-    return this.recordings$;
   }
 
   /**
@@ -75,18 +73,6 @@ export class InputsComponent implements OnInit {
     );
   }
 
-  /**
-   * Deselects any recordings no longer present in the changed recordings collection. Otherwise,
-   * the "select" property may still hold a selection that no longer applies, potentially allowing
-   * operations that shouldn't happen if they depend on that selection.
-   * @param currRecordings - Changed collection.
-   */
-  onRecordingsChange(currRecordings: Recording[]) {
-    if (this.selected && this.recordings?.indexOf(this.selected) === -1) {
-      this.deselectAll();
-    }
-  }
-
 
   onSelection(recording: Recording) {
     this.selected = recording;
@@ -101,7 +87,8 @@ export class InputsComponent implements OnInit {
 
   
   /**
-   * Reflects the loading state of the data transaction.
+   * Reflects the component's state during and after the data transaction. This includes resetting
+   * any previously selected recording that is no longer part of the rendered collection.
    * @param obs - Observable from async data transaction.
    * @param message - Explanatory string of waiting/loading state before transaction's completion.
    */
@@ -117,6 +104,14 @@ export class InputsComponent implements OnInit {
           this.error = JSON.stringify(error);
         }
         return throwError(this.error);
+      }),
+
+      // BUG: triggers an ExpressionChangedAfterItHasBeenCheckedError because it updates "selected" before
+      // the list is updated on observable success (because the observable is updated AFTER the logic below)
+      tap(recordings => {
+        if (this.selected && recordings.indexOf(this.selected) === -1) {
+          this.deselectAll();
+        }
       }),
 
       finalize(() => {

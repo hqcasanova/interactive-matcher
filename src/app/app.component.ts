@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Recording } from './shared/recording.model';
 
 @Component({
   selector: 'app-root',

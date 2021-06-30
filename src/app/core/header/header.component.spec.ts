@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { environment } from 'src/environments/environment';
 
 import { HeaderComponent } from './header.component';
 
@@ -21,5 +22,10 @@ describe('HeaderComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should render the app\'s set name', () => {
+    const compiled = fixture.nativeElement;
+    expect(compiled.querySelector('.app-name').textContent).toContain(environment.appName);
   });
 });
