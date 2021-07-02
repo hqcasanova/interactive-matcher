@@ -36,7 +36,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
     snackBar: MatSnackBar, 
     public fuzzyService: FuzzyService,
     public dialogue: MatDialog,
-    private cdRef: ChangeDetectorRef,
+    private cdRef: ChangeDetectorRef
   ) {
     super(recordingsService, snackBar);
   }

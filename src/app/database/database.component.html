@@ -19,7 +19,8 @@
   [isLoading]="isLoading"
   [loadMessage]="loadMessage"
   [error]="error"
-  (selection)="onSelection($event)">
+  (selection)="onSelection($event)"
+  (recordingsChange)="onRecordingsChange($event)">
   <mat-card>
     <mat-card-title>
       <mat-icon aria-hidden="false" aria-label="Info icon">info</mat-icon>

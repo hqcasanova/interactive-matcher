@@ -17,7 +17,9 @@ export class RecordingListComponent implements OnInit {
   @Input() isLoading: boolean = false;
   @Input() loadMessage: string = '';
   @Output() selection = new EventEmitter<Recording>();
-  @Output() recordingsChange = new EventEmitter<Recording[]>();
+
+  // Emitted asynchronously to avoid digest cycle exceptions.
+  @Output() recordingsChange = new EventEmitter<Recording[]>(true);
 
   @ViewChild(MatSelectionList) list!: MatSelectionList;
   @ViewChildren(MatListOption, { read: ElementRef }) optChildrenEls!: QueryList<ElementRef>

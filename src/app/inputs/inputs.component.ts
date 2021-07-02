@@ -74,6 +74,18 @@ export class InputsComponent implements OnInit {
   }
 
 
+  /**
+   * Resets any previously selected recording that is no longer part of the
+   * rendered collection.
+   * @param currRecordings - Rendered collection after changes.
+   */
+  onRecordingsChange(currRecordings: Recording[]) {
+    if (this.selected && currRecordings.indexOf(this.selected) === -1) {
+      this.deselectAll();
+    }
+  }
+
+
   onSelection(recording: Recording) {
     this.selected = recording;
     this.selection.emit(recording);
@@ -87,8 +99,7 @@ export class InputsComponent implements OnInit {
 
   
   /**
-   * Reflects the component's state during and after the data transaction. This includes resetting
-   * any previously selected recording that is no longer part of the rendered collection.
+   * Reflects the component's loading state during and after the data transaction.
    * @param obs - Observable from async data transaction.
    * @param message - Explanatory string of waiting/loading state before transaction's completion.
    */
@@ -104,14 +115,6 @@ export class InputsComponent implements OnInit {
           this.error = JSON.stringify(error);
         }
         return throwError(this.error);
-      }),
-
-      // BUG: triggers an ExpressionChangedAfterItHasBeenCheckedError because it updates "selected" before
-      // the list is updated on observable success (because the observable is updated AFTER the logic below)
-      tap(recordings => {
-        if (this.selected && recordings.indexOf(this.selected) === -1) {
-          this.deselectAll();
-        }
       }),
 
       finalize(() => {
