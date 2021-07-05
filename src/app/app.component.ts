@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Recording } from './shared/recording.model';
+import { environment } from 'src/environments/environment.base';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +7,5 @@ import { Recording } from './shared/recording.model';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  
+  public DEFAULT_AUTO_SEARCH: boolean = environment.defaultAutoSearch;
 }

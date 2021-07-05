@@ -1,0 +1,87 @@
+.mat-accordion {
+  display: block;
+
+  .mat-expansion-panel {
+    margin-bottom: -.5rem;
+    background: none;
+    box-shadow: none;
+
+    .mat-expansion-panel-header {
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 0;
+
+      // Restores normal colour (originally gray due to disabled state)
+      // NOTE: disabling the header prevents the whole of it becoming clickable.
+      &[aria-disabled=true] {
+        color: inherit;
+      }
+
+      .mat-expansion-panel-header-description {
+        overflow: hidden;
+      }
+    }
+
+    .field-chips {
+      overflow: hidden;
+      padding: .3rem 0;
+
+      ::ng-deep .mat-chip-list-wrapper {
+        flex-wrap: nowrap;
+      }
+
+      .field-chip {
+        display: flex;
+        overflow: hidden;
+        background: var(--accent-light);
+        color: #fff;
+        cursor: pointer;
+
+        &.delete {
+          background: var(--warn-dark);
+
+          .mat-icon {
+            color: #fafafa;
+          }
+        }
+
+        .chip-text {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        // Removes the default gray background on hover/focus
+        &:after {
+          background: var(--accent-dark);
+        }
+
+        .mat-icon {
+          opacity: 1;
+          color: var(--accent);
+        }
+      }
+    }
+
+    .expand-btn {
+      width: auto;
+
+      .expand-icon {
+        margin-top: -.2rem;
+        transition: transform .3s ease;
+      }
+    }
+    
+    &.mat-expanded {
+      margin-bottom: -1rem;
+
+      .mat-expansion-panel-header {
+        height: 48px;
+      }
+
+      .expand-icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}

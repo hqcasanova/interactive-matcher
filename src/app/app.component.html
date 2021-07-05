@@ -1,30 +1,18 @@
-<mat-toolbar class="app-header">
-  <h1 class="app-branding">
-    <mat-icon class="app-logo" aria-hidden="false" aria-label="Fingerprint">fingerprint</mat-icon>
-    <span class="app-name">			
-      Recordnise
-    </span>
-  </h1>
-  <span class="app-tagline">Match recordings interactively</span>
-  <span class="link-wrapper">
-    <a class="source-link" href="https://github.com/hqcasanova/interactive-matcher" target="_blank"
-      mat-raised-button>
-      View source
-    </a>
-  </span>
-</mat-toolbar>
+<app-header class="app-header"></app-header>
 
 <app-inputs class="app-list" 
   [dataFile]="'sound_recordings_input_report.csv'"
-  (selection)="database.search($event)"
+  (selection)="cross.isAutoSearch && database.search($event)"
   #inputs>
 </app-inputs>
 
 <app-cross-actions class="app-actions" 
   [isSelInput]="inputs.selected !== undefined"
   [isSelDatabase]="database.selected !== undefined"
+  [isAutoSearch]="DEFAULT_AUTO_SEARCH"
   (registration)="database.onRegister(inputs.selected)"
-  (matching)="inputs.onMatch(inputs.selected)">
+  (matching)="inputs.onMatch(inputs.selected)"
+  #cross>
 </app-cross-actions>
 
 <app-database class="app-list" 

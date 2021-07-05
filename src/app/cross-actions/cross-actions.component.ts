@@ -9,6 +9,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class CrossActionsComponent implements OnInit {
   @Input() isSelInput?: boolean;
   @Input() isSelDatabase?: boolean;
+  @Input() isAutoSearch: boolean = true;
   @Output() registration = new EventEmitter();
   @Output() matching = new EventEmitter();
 

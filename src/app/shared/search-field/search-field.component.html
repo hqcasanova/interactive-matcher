@@ -1,4 +1,5 @@
-<mat-form-field class="search-field" color="accent">
+<mat-form-field class="search-field" color="accent"
+  (click)="$event.stopPropagation()">
   <input type="search" matInput
     [(ngModel)]="query"
     (keyup.enter)="onSearch($event)"

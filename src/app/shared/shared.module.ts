@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,22 +13,28 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { RecordingItemComponent } from './recording-item/recording-item.component';
 import { RecordingListComponent } from './recording-list/recording-list.component';
 import { SearchFieldComponent } from './search-field/search-field.component';
 import { ConfirmDialogueComponent } from './confirm-dialogue/confirm-dialogue.component';
+import { FieldAccordionComponent } from './field-accordion/field-accordion.component';
+import { SerialisePipe } from './serialise.pipe';
+import { EnumeratePipe } from './enumerate.pipe';
 
 @NgModule({
   declarations: [
     RecordingItemComponent,
     RecordingListComponent,
     SearchFieldComponent,
-    ConfirmDialogueComponent
+    ConfirmDialogueComponent,
+    FieldAccordionComponent,
+    SerialisePipe,
+    EnumeratePipe
   ],
   imports: [
     CommonModule,
-    HttpClientModule,
     FormsModule,
     MatCardModule,
     MatListModule,
@@ -44,16 +49,25 @@ import { ConfirmDialogueComponent } from './confirm-dialogue/confirm-dialogue.co
     MatChipsModule,
     MatDialogModule
   ],
+  providers: [
+    SerialisePipe
+  ],
   exports: [
+    CommonModule,
+    FormsModule,
     RecordingListComponent,
     SearchFieldComponent,
+    FieldAccordionComponent,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
     MatSnackBarModule,
     MatExpansionModule,
     MatToolbarModule,
-    MatChipsModule
+    MatChipsModule,
+    MatSlideToggleModule,
+    SerialisePipe,
+    EnumeratePipe
   ]
 })
 export class SharedModule { }

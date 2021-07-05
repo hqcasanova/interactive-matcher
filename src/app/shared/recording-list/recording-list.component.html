@@ -1,14 +1,14 @@
 <mat-selection-list class="recording-list" 
   [multiple]="false"
   #list>
-  <ng-container *ngIf="recordings !== undefined">
+  <ng-container *ngIf="recordings !== null">
     <div class="counts-wrapper">
       <span class="total-count list-count">{{ recordings.length }} recordings</span>
       <span class="selected-count list-count"
         [style.visibility]="list.selectedOptions.selected.length ? 'visible' : 'hidden'">
         <button class="selected-btn" mat-icon-button color="primary" aria-label="selected count button"
           disableRipple
-          (click)="showSelected()">
+          (click)="showSelected(); $event.stopPropagation()">
           {{ list.selectedOptions.selected.length }} selected
         </button>
       </span>
@@ -18,7 +18,7 @@
         *ngFor="let recording of recordings"
         [value]="recording"
         [class.selected-option]="option.selected"
-        (click)="onSelection(recording)"
+        (click)="onSelection(recording); $event.stopPropagation()"
         #option>
         <recording-item 
           [recording]="recording"
