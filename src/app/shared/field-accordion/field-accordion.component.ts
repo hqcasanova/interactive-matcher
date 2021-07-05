@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatExpansionPanel } from '@angular/material/expansion';
 
 @Component({
   selector: 'field-accordion',
@@ -11,6 +12,8 @@ export class FieldAccordionComponent implements OnInit {
   @Output() afterExpansion = new EventEmitter();
   @Output() chipRemoval = new EventEmitter();
 
+  @ViewChild('panel') panel!: MatExpansionPanel;
+
   constructor() { }
 
   ngOnInit(): void {
@@ -22,6 +25,16 @@ export class FieldAccordionComponent implements OnInit {
 
   onRemoved() {
     this.chipRemoval.emit();
+  }
+
+  onDeleteChipClass(event: any, isAdd: boolean) {
+    if (event.target.classList.contains('mat-chip-remove')) {
+      event.currentTarget.classList.toggle('delete', isAdd);
+    }
+  }
+
+  onPanelToggle() {
+    this.panel.toggle();
   }
 
 }

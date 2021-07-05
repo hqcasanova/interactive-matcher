@@ -236,9 +236,9 @@ h1, h2 {
   --hyper-accent-lighter: #{map-get($interactive-matcher-hyperaccent, 100)};
   --hyper-accent-dark: #{map-get($interactive-matcher-hyperaccent, 700)};
 
-  --error: #{map-get($interactive-matcher-warn, 500)};
-  --error-light: #{map-get($interactive-matcher-warn, 200)};
-  --error-dark: #{map-get($interactive-matcher-warn, 900)};
+  --warn: #{map-get($interactive-matcher-warn, 500)};
+  --warn-light: #{map-get($interactive-matcher-warn, 200)};
+  --warn-dark: #{map-get($interactive-matcher-warn, 900)};
 }
 
 // Title-cases all field labels

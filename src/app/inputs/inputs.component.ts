@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
@@ -22,6 +22,11 @@ const SNACK_DELAY = environment.snackbarDelay;
 export class InputsComponent implements OnInit {
   @Input() dataFile!: string;
   @Output() selection = new EventEmitter<Recording>();
+
+  @HostListener('click', ['$event'])
+  onClick(event: Event) {
+    this.deselectAll();
+  }
 
   @ViewChild(RecordingListComponent) recordingList!: RecordingListComponent;
   

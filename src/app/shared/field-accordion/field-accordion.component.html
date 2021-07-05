@@ -1,25 +1,35 @@
 <mat-accordion>
-  <mat-expansion-panel (afterExpand)="onAfterExpand()">
+  <mat-expansion-panel 
+    (afterExpand)="onAfterExpand()"
+    [disabled]="true"
+    #panel>
     <mat-expansion-panel-header>
-      <mat-panel-description class="search-expand-wrapper">
-        <mat-chip-list class="top-btn search-chips" aria-label="Search status"
+      <mat-panel-title>
+        <ng-content select="[header-title]"></ng-content>
+      </mat-panel-title>
+      <mat-panel-description>
+        <mat-chip-list class="field-chips" aria-label="Field status"
           [selectable]="false">
-          <mat-chip class="search-chip"
+          <mat-chip class="field-chip"
             disableRipple
             *ngIf="fieldValue.length"
             [removable]="true"
-            (removed)="onRemoved()">
+            (removed)="onRemoved()"
+            (click)="panel.open()"
+            (mouseover)="onDeleteChipClass($event, true)"
+            (mouseout)="onDeleteChipClass($event, false)">
             <div class="chip-text">{{ fieldValue }}</div>
             <mat-icon matChipRemove>cancel</mat-icon>
           </mat-chip>
         </mat-chip-list>
-        
-        <button class="top-btn expand-btn" mat-icon-button aria-label="expand button for search field"
-          color="accent"
-          disableRipple>
-          {{ expandText }}
-        </button>
       </mat-panel-description>
+      <button class="expand-btn" mat-icon-button aria-label="reveal field"
+        color="accent"
+        disableRipple
+        (click)="onPanelToggle()">
+        {{ expandText }}
+        <mat-icon class="expand-icon">expand_more</mat-icon>
+      </button>
     </mat-expansion-panel-header>
 
     <ng-content></ng-content>

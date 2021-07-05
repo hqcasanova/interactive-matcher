@@ -1,10 +1,12 @@
-<h2 class="mat-display-1">Registered</h2>
+
 
 <field-accordion
   [fieldValue]="searchQuery | serialise:fuzzyService.searchKeys"
   [expandText]="'Search'"
   (afterExpansion)="searchField.focus()"
-  (chipRemoval)="reset()">
+  (chipRemoval)="reset()"
+  (click)="$event.stopPropagation()">
+  <h2 class="mat-display-1" header-title>Registered</h2>
   <search-field
     [query]="searchQuery | serialise:fuzzyService.searchKeys"
     [placeholder]="fuzzyService.searchKeys | enumerate:' and/or ':['isrc']"
@@ -20,7 +22,8 @@
   [loadMessage]="loadMessage"
   [error]="error"
   (selection)="onSelection($event)"
-  (recordingsChange)="onRecordingsChange($event)">
+  (recordingsChange)="onRecordingsChange($event)"
+  (click)="$event.stopPropagation()">
   <mat-card>
     <mat-card-title>
       <mat-icon aria-hidden="false" aria-label="Info icon">info</mat-icon>

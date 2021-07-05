@@ -2,80 +2,93 @@
   display: block;
 
   .mat-expansion-panel {
-    margin-top: -.35rem;
+    margin-bottom: -.5rem;
     background: none;
     box-shadow: none;
 
     .mat-expansion-panel-header {
-      pointer-events: none;
-
-      &:hover {
-        background: none;
-      }
-
-      ::ng-deep .mat-expansion-indicator {
-        pointer-events: all;
-      }
-    }
-
-    .search-expand-wrapper {
-      overflow: hidden;
       justify-content: space-between;
-      margin-left: 8rem;
-      margin-right: 0;
-    }
+      align-items: flex-start;
+      padding: 0;
 
-    .top-btn {
-      width: auto;
-      margin-top: .34rem;
-      transition: margin .3s ease;
-      pointer-events: all;
-
-      &.expand-btn {
-        padding-right: .5rem;
+      // Restores normal colour (originally gray due to disabled state)
+      // NOTE: disabling the header prevents the whole of it becoming clickable.
+      &[aria-disabled=true] {
+        color: inherit;
       }
 
-      &.search-chips {
+      .mat-expansion-panel-header-description {
         overflow: hidden;
-        padding: .3rem 1rem 0;
+      }
+    }
 
-        .search-chip {
-          display: flex;
-          overflow: hidden;
-          background: transparent;
-          border: 1px solid var(--accent);
-          pointer-events: none;
+    .field-chips {
+      overflow: hidden;
+      padding: .3rem 1rem 0;
 
-          .chip-text {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            font-weight: 400;
+      .field-chip {
+        display: flex;
+        overflow: hidden;
+        background: transparent;
+        border: 1px solid var(--accent);
+        cursor: pointer;
+
+        &.delete {
+          border-color: var(--warn-dark);
+
+          * {
+            color: var(--warn-dark) !important;
           }
+        }
 
-          .mat-icon {
-            opacity: .7;
+        .chip-text {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          font-weight: 400;
+        }
+
+        // Removes the default gray background on hover/focus
+        &:after {
+          opacity: 0 !important;
+        }
+
+        &:hover {
+          .chip-text {
             color: var(--accent);
-            pointer-events: all;
+          }
+        }
 
-            &:hover {
-              opacity: 1;
-            }
+        .mat-icon {
+          opacity: .7;
+          color: var(--accent);
+          
+
+          &:hover {
+            opacity: 1;
           }
         }
       }
     }
+
+    .expand-btn {
+      width: auto;
+
+      .expand-icon {
+        margin-top: -.2rem;
+        transition: transform .3s ease;
+      }
+    }
     
     &.mat-expanded {
-      margin-top: 0;
       margin-bottom: -1rem;
 
       .mat-expansion-panel-header {
         height: 48px;
       }
 
-      .top-btn {
-        margin-top: -.25rem;
+      .expand-icon {
+        transform: rotate(180deg);
       }
     }
   }
