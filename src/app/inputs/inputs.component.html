@@ -5,8 +5,7 @@
   [isLoading]="isLoading" 
   [error]="error"
   (selection)="onSelection($event)"
-  (recordingsChange)="onRecordingsChange($event)"
-  (click)="$event.stopPropagation()">
+  (recordingsChange)="onRecordingsChange($event)">
   <mat-card>
     <mat-card-title class="empty-title">
       <mat-icon aria-hidden="false" aria-label="Info icon">info</mat-icon>

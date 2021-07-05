@@ -7,26 +7,29 @@
       <mat-panel-title>
         <ng-content select="[header-title]"></ng-content>
       </mat-panel-title>
+      
       <mat-panel-description>
         <mat-chip-list class="field-chips" aria-label="Field status"
           [selectable]="false">
           <mat-chip class="field-chip"
+            *ngFor="let chipText of splitIdOff(fieldValue)"
             disableRipple
-            *ngIf="fieldValue.length"
+            [value]="chipText"
             [removable]="true"
-            (removed)="onRemoved()"
-            (click)="panel.open()"
-            (mouseover)="onDeleteChipClass($event, true)"
-            (mouseout)="onDeleteChipClass($event, false)">
-            <div class="chip-text">{{ fieldValue }}</div>
+            (removed)="onRemoved($event)"
+            (click)="panel.open(); $event.stopPropagation()"
+            (mouseover)="onDeleteChipHover($event, true)"
+            (mouseout)="onDeleteChipHover($event, false)">
+            <div class="chip-text">{{ chipText }}</div>
             <mat-icon matChipRemove>cancel</mat-icon>
           </mat-chip>
         </mat-chip-list>
       </mat-panel-description>
+      
       <button class="expand-btn" mat-icon-button aria-label="reveal field"
         color="accent"
         disableRipple
-        (click)="onPanelToggle()">
+        (click)="onPanelToggle(); $event.stopPropagation()">
         {{ expandText }}
         <mat-icon class="expand-icon">expand_more</mat-icon>
       </button>

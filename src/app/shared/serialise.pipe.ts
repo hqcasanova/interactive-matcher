@@ -24,7 +24,8 @@ export class SerialisePipe implements PipeTransform {
     if (!input || isEmpty(input)) {
       return '';
     }
-    
-    return Object.values(pick(input, properties)).join(' ');
+
+    const definedValues = Object.values(pick(input, properties)).filter(Boolean);
+    return definedValues.join(' ');
   }
 }

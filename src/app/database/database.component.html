@@ -1,11 +1,8 @@
-
-
 <field-accordion
   [fieldValue]="searchQuery | serialise:fuzzyService.searchKeys"
   [expandText]="'Search'"
   (afterExpansion)="searchField.focus()"
-  (chipRemoval)="reset()"
-  (click)="$event.stopPropagation()">
+  (chipRemoval)="search($event)">
   <h2 class="mat-display-1" header-title>Registered</h2>
   <search-field
     [query]="searchQuery | serialise:fuzzyService.searchKeys"
@@ -22,8 +19,7 @@
   [loadMessage]="loadMessage"
   [error]="error"
   (selection)="onSelection($event)"
-  (recordingsChange)="onRecordingsChange($event)"
-  (click)="$event.stopPropagation()">
+  (recordingsChange)="onRecordingsChange($event)">
   <mat-card>
     <mat-card-title>
       <mat-icon aria-hidden="false" aria-label="Info icon">info</mat-icon>

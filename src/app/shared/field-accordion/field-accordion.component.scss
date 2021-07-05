@@ -24,20 +24,24 @@
 
     .field-chips {
       overflow: hidden;
-      padding: .3rem 1rem 0;
+      padding: .3rem 0;
+
+      ::ng-deep .mat-chip-list-wrapper {
+        flex-wrap: nowrap;
+      }
 
       .field-chip {
         display: flex;
         overflow: hidden;
-        background: transparent;
-        border: 1px solid var(--accent);
+        background: var(--accent-light);
+        color: #fff;
         cursor: pointer;
 
         &.delete {
-          border-color: var(--warn-dark);
+          background: var(--warn-dark);
 
-          * {
-            color: var(--warn-dark) !important;
+          .mat-icon {
+            color: #fafafa;
           }
         }
 
@@ -45,28 +49,16 @@
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
-          font-weight: 400;
         }
 
         // Removes the default gray background on hover/focus
         &:after {
-          opacity: 0 !important;
-        }
-
-        &:hover {
-          .chip-text {
-            color: var(--accent);
-          }
+          background: var(--accent-dark);
         }
 
         .mat-icon {
-          opacity: .7;
+          opacity: 1;
           color: var(--accent);
-          
-
-          &:hover {
-            opacity: 1;
-          }
         }
       }
     }
