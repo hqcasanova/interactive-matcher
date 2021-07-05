@@ -2,15 +2,17 @@
 
 <app-inputs class="app-list" 
   [dataFile]="'sound_recordings_input_report.csv'"
-  (selection)="database.search($event)"
+  (selection)="cross.isAutoSearch && database.search($event)"
   #inputs>
 </app-inputs>
 
 <app-cross-actions class="app-actions" 
   [isSelInput]="inputs.selected !== undefined"
   [isSelDatabase]="database.selected !== undefined"
+  [isAutoSearch]="DEFAULT_AUTO_SEARCH"
   (registration)="database.onRegister(inputs.selected)"
-  (matching)="inputs.onMatch(inputs.selected)">
+  (matching)="inputs.onMatch(inputs.selected)"
+  #cross>
 </app-cross-actions>
 
 <app-database class="app-list" 

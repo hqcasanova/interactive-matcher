@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatChipEvent, MatChipList } from '@angular/material/chips';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { environment } from 'src/environments/environment.base';
+
+const ISRC_REGEX = environment.isrcRegex;
 
 @Component({
   selector: 'field-accordion',
@@ -25,13 +28,24 @@ export class FieldAccordionComponent implements OnInit {
     this.afterExpansion.emit();
   }
 
+  /**
+   * Triggers a custom event on chip removal with the text contents of the chip list.
+   * @param event - Material's event object containing the removed chip.
+   */
   onRemoved(event: MatChipEvent) {
     const chipsText = this.chipList.chips.reduce((acc, curr) => acc + curr.value, '');
     this.chipRemoval.emit(chipsText.replace(event.chip.value, ''));
   }
 
-  splitIdOff(text: string) {
-    const idOccurrences = text.match(/[A-Z0-9]{12}/g);
+  /**
+   * Splits a given string into ID-like tokens and the rest.
+   * @param text - String to be split.
+   * @param idRegex - Regular expression for the ID format.
+   * @returns List of tokens and the rest of the string.
+   * NOTE: perfect candidate for performance optimisation as it's called many times due to template.
+   */
+  splitIdOff(text: string, idRegex: RegExp = ISRC_REGEX): string[] {
+    const idOccurrences = text.match(idRegex);
     let splitText = idOccurrences || [];
     let textWithoutId = text;
 

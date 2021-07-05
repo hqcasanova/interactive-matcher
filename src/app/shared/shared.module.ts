@@ -13,6 +13,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { RecordingItemComponent } from './recording-item/recording-item.component';
 import { RecordingListComponent } from './recording-list/recording-list.component';
@@ -53,8 +54,10 @@ import { EnumeratePipe } from './enumerate.pipe';
   ],
   exports: [
     CommonModule,
+    FormsModule,
     RecordingListComponent,
     SearchFieldComponent,
+    FieldAccordionComponent,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
@@ -62,7 +65,7 @@ import { EnumeratePipe } from './enumerate.pipe';
     MatExpansionModule,
     MatToolbarModule,
     MatChipsModule,
-    FieldAccordionComponent,
+    MatSlideToggleModule,
     SerialisePipe,
     EnumeratePipe
   ]

@@ -36,5 +36,11 @@ export const environment = {
   },
 
   // Time in milliseconds before notifications are auto-dismissed, if at all.
-  snackbarDelay: 4000
+  snackbarDelay: 4000,
+
+  // Regular expression for standard ISRC IDs.
+  isrcRegex: /[A-Z0-9]{12}/g,
+
+  // Default behaviour when selecting an input recording
+  defaultAutoSearch: true
 };
