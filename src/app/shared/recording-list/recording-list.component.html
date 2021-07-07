@@ -5,11 +5,11 @@
     <div class="counts-wrapper">
       <span class="total-count list-count">{{ recordings.length }} recordings</span>
       <span class="selected-count list-count"
-        [style.visibility]="list.selectedOptions.selected.length ? 'visible' : 'hidden'">
+        [style.visibility]="selected.length ? 'visible' : 'hidden'">
         <button class="selected-btn" mat-icon-button color="primary" aria-label="selected count button"
           disableRipple
           (click)="showSelected(); $event.stopPropagation()">
-          {{ list.selectedOptions.selected.length }} selected
+          {{ selected.length }} selected
         </button>
       </span>
     </div>

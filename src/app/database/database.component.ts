@@ -114,15 +114,21 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
   /**
    * Triggers a fuzzy search given a query or a recording. Auto-matching effectively becomes
    * a specific search, thus helping expose its corresponding list state more explicitly to
-   * the end-user.
+   * the end-user. If there is no query, the unfiltered recordings collection is rendered.
    * @param query - String being searched for.
    * @param message - Text shown while waiting for the retrieval of search results.
    */
   search(query: string | Recording, message: string = 'Searching...') {
-    const searched$ = this.recordingsService.fuzzySearch(query);
-
-    this.searchQuery = query;
-    this.recordings$ = this.updateState(searched$, message);
+    let searched$;
+    
+    if (query) {
+      this.searchQuery = query;
+      searched$ = this.recordingsService.fuzzySearch(query);
+      this.recordings$ = this.updateState(searched$, message);
+    
+    } else {
+      this.reset();
+    }
   }
 
   /**
