@@ -26,6 +26,19 @@ export class RecordingListComponent implements OnInit {
 
   constructor() { }
 
+  /**
+   * Returns all currently selected recordings, if at all.
+   */
+  get selected(): Recording[] {
+    const selOpts = this.list.selectedOptions;
+
+    if (selOpts.isEmpty()) {
+      return [];
+    }
+    
+    return selOpts.selected.map(item => item.value);
+  }
+
   ngOnInit(): void {
   }
 
@@ -42,7 +55,7 @@ export class RecordingListComponent implements OnInit {
 
   /**
    * Relays to the outside world the selected option from the list as a recording.
-   * Re-selection will still emit the event regardless of the option already being selected.
+   * Re-selection will still emit the event regardless of the option being selected already or not.
    * @param recording - Item on recordings list that was clicked on.
    */
   onSelection(recording: Recording) {
@@ -54,6 +67,7 @@ export class RecordingListComponent implements OnInit {
    */
   deselectAll() {
     this.list.deselectAll();
+    this.selection.emit();
   }
 
   /**

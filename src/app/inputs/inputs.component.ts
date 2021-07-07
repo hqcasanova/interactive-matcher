@@ -23,6 +23,8 @@ export class InputsComponent implements OnInit {
   @Input() dataFile!: string;
   @Output() selection = new EventEmitter<Recording>();
 
+  // Cancels current selection by clicking on any area within the list away from the actual recordings
+  // NOTE: clicks from actions buttons are prevented from bubbling.
   @HostListener('click', ['$event'])
   onClick(event: Event) {
     this.deselectAll();
@@ -80,13 +82,20 @@ export class InputsComponent implements OnInit {
 
 
   /**
-   * Resets any previously selected recording that is no longer part of the
-   * rendered collection.
+   * Syncs the "selected" input's value with whatever selection the recording list
+   * ends up having after a change in the recordings collection.
    * @param currRecordings - Rendered collection after changes.
+   * NOTE: assumes a single-option list.
    */
   onRecordingsChange(currRecordings: Recording[]) {
+
+    // Any previous selection is no longer present in the new recondings collection
     if (this.selected && currRecordings.indexOf(this.selected) === -1) {
       this.deselectAll();
+      
+    // Past selection previously not present occurs now in new recordings collection
+    } else if (!this.selected && this.recordingList.selected.length) {
+      this.selected = this.recordingList.selected[0];
     }
   }
 
@@ -113,6 +122,10 @@ export class InputsComponent implements OnInit {
     this.loadMessage = message;
 
     return ob$.pipe(
+      tap(() => {
+        this.error = '';
+      }),
+
       catchError(error => {
         if (typeof error === 'string' || error.toString) {
           this.error = error;
