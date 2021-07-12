@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Select, Store } from '@ngxs/store';
 import { Observable, of, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { mergeMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment.base';
 import { FuzzyService } from '../core/fuzzy.interface';
 
@@ -64,6 +64,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
 
   ngOnDestroy() {
     this.selectionSubscription.unsubscribe();
+    this.autoSearchSubscription.unsubscribe();
   }
 
   onSelection(recording: Recording) {
@@ -118,7 +119,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
     
     if (recording) {
       return hasRec$.pipe(
-        switchMap((hasRec: boolean) => {
+        mergeMap((hasRec: boolean) => {
           if (hasRec) {
             return this.dialogue.open(ConfirmDialogueComponent, { data: {
               title: 'ISRC already registered',

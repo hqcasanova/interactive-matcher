@@ -44,8 +44,10 @@ export class RecordingListComponent implements OnInit {
   }
 
   /**
-   * Notifies to the outside world that the selection has changed.
-   * NOTE: by Material's design, changes from one selected option to another emit two events.
+   * Notifies to the outside world that the selection has changed. Uses Material's CDK Subject
+   * property to forward changes since the list's "selectionChange" event only emits interactively.
+   * NOTE: by CDK's design, changes from one selected option to another appear to emit two events.
+   * {@link https://material.angular.io/cdk/collections/api#SelectionModel}
    */
   ngAfterViewInit() {
     this.list.selectedOptions.changed.subscribe(event => {

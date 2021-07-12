@@ -13,8 +13,8 @@ import { RecordingsService } from './recordings.service';
 const SNACK_DELAY = environment.snackbarDelay;
 
 // This component assumes a list allowing only one selected item at a time.
-// TODO: maybe pass in current DB list and use change detection on it to generalise this list's update ops.
-// eg: not highlighting ISRC of selected recording if no other DB/input recording exists with the same ISRC
+// TODO: unnecessary highlighting of ISRC in some cases - a likely candidate for a store/local state solution.
+// eg: prevent highlighting ISRC of selected recording if no count of other DB/input recording with the same ISRC
 @Component({
   selector: 'app-inputs',
   templateUrl: './inputs.component.html',
