@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { environment } from 'src/environments/environment.base';
+import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { Recording } from './shared/recording.model';
+import { AppState } from './shared/state/app.state';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +10,6 @@ import { environment } from 'src/environments/environment.base';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  public DEFAULT_AUTO_SEARCH: boolean = environment.defaultAutoSearch;
+  @Select(AppState.getSelInput) selInput$!: Observable<Recording>;
+  @Select(AppState.getSelDatabase) selDatabase$!: Observable<Recording>;
 }

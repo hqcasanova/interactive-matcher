@@ -14,6 +14,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 
 import { RecordingItemComponent } from './recording-item/recording-item.component';
 import { RecordingListComponent } from './recording-list/recording-list.component';
@@ -22,6 +25,8 @@ import { ConfirmDialogueComponent } from './confirm-dialogue/confirm-dialogue.co
 import { FieldAccordionComponent } from './field-accordion/field-accordion.component';
 import { SerialisePipe } from './serialise.pipe';
 import { EnumeratePipe } from './enumerate.pipe';
+
+import { AppState } from './state/app.state';
 
 @NgModule({
   declarations: [
@@ -47,7 +52,12 @@ import { EnumeratePipe } from './enumerate.pipe';
     MatExpansionModule,
     MatToolbarModule,
     MatChipsModule,
-    MatDialogModule
+    MatDialogModule,
+    NgxsModule.forRoot([
+      AppState
+    ]),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
+    NgxsLoggerPluginModule.forRoot()
   ],
   providers: [
     SerialisePipe

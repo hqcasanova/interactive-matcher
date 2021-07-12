@@ -11,13 +11,13 @@
       <mat-panel-description>
         <mat-chip-list class="field-chips" aria-label="Field status"
           [selectable]="false">
-          <mat-chip class="field-chip"
+          <mat-chip class="field-chip action-btn"
             *ngFor="let chipText of splitIdOff(fieldValue)"
             disableRipple
             [value]="chipText"
             [removable]="true"
             (removed)="onRemoved($event)"
-            (click)="panel.open(); $event.stopPropagation()"
+            (click)="panel.open()"
             (mouseover)="onDeleteChipHover($event, true)"
             (mouseout)="onDeleteChipHover($event, false)">
             <div class="chip-text">{{ chipText }}</div>
@@ -26,10 +26,10 @@
         </mat-chip-list>
       </mat-panel-description>
       
-      <button class="expand-btn" mat-icon-button aria-label="reveal field"
+      <button class="expand-btn action-btn" mat-icon-button aria-label="reveal field"
         color="accent"
         disableRipple
-        (click)="onPanelToggle(); $event.stopPropagation()">
+        (click)="onPanelToggle()">
         {{ expandText }}
         <mat-icon class="expand-icon">expand_more</mat-icon>
       </button>

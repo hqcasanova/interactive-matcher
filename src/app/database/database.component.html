@@ -14,12 +14,10 @@
 
 <recording-list
   [recordings]="recordings$ | async"
-  [reference]="reference"
+  [reference]="selInput$ | async"
   [isLoading]="isLoading"
   [loadMessage]="loadMessage"
-  [error]="error"
-  (selection)="onSelection($event)"
-  (recordingsChange)="onRecordingsChange($event)">
+  [error]="error">
   <mat-card>
     <mat-card-title>
       <mat-icon aria-hidden="false" aria-label="Info icon">info</mat-icon>

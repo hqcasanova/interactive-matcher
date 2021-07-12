@@ -5,20 +5,20 @@
     <div class="counts-wrapper">
       <span class="total-count list-count">{{ recordings.length }} recordings</span>
       <span class="selected-count list-count"
-        [style.visibility]="selected.length ? 'visible' : 'hidden'">
-        <button class="selected-btn" mat-icon-button color="primary" aria-label="selected count button"
+        [style.visibility]="selectedCount ? 'visible' : 'hidden'">
+        <button class="selected-btn action-btn" mat-icon-button color="primary" aria-label="selected count button"
           disableRipple
-          (click)="showSelected(); $event.stopPropagation()">
-          {{ selected.length }} selected
+          (click)="showSelected()">
+          {{ selectedCount }} selected
         </button>
       </span>
     </div>
     <div class="options-wrapper">
-      <mat-list-option class="list-option" 
+      <mat-list-option class="list-option action-btn" 
         *ngFor="let recording of recordings"
         [value]="recording"
         [class.selected-option]="option.selected"
-        (click)="onSelection(recording); $event.stopPropagation()"
+        (click)="onSelection(recording)"
         #option>
         <recording-item 
           [recording]="recording"

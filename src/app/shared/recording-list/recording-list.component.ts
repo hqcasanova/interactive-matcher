@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewEncapsulation, ViewChild, ElementRef, QueryList, ViewChildren, SimpleChanges } from '@angular/core';
-import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angular/material/list';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef, QueryList, ViewChildren, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { MatListOption, MatSelectionList} from '@angular/material/list';
 import { Recording } from '../recording.model';
 
 @Component({
@@ -10,21 +10,20 @@ import { Recording } from '../recording.model';
 export class RecordingListComponent implements OnInit {
   
   // External recording against which recordings in this list may be compared to.
-  @Input() reference?: Recording;
+  @Input() reference: Recording | null | undefined = null;
   
   @Input() recordings: Recording[] | null = null;
   @Input() error: string = '';
   @Input() isLoading: boolean = false;
   @Input() loadMessage: string = '';
-  @Output() selection = new EventEmitter<Recording>();
 
-  // Emitted asynchronously to avoid digest cycle exceptions.
-  @Output() recordingsChange = new EventEmitter<Recording[]>(true);
+  // Emitted asynchronously to avoid digest cycle exceptions when past selection re-emerges.
+  @Output() selection = new EventEmitter<Recording>(true);
 
   @ViewChild(MatSelectionList) list!: MatSelectionList;
   @ViewChildren(MatListOption, { read: ElementRef }) optChildrenEls!: QueryList<ElementRef>
 
-  constructor() { }
+  selectedCount: number = 0;
 
   /**
    * Returns all currently selected recordings, if at all.
@@ -39,18 +38,28 @@ export class RecordingListComponent implements OnInit {
     return selOpts.selected.map(item => item.value);
   }
 
+  constructor(private cdRef: ChangeDetectorRef) { }
+
   ngOnInit(): void {
   }
 
   /**
-   * Notifies to the outside world that the list of recordings has changed.
+   * Notifies to the outside world that the selection has changed. Uses Material's CDK Subject
+   * property to forward changes since the list's "selectionChange" event only emits interactively.
+   * NOTE: by CDK's design, changes from one selected option to another appear to emit two events.
+   * {@link https://material.angular.io/cdk/collections/api#SelectionModel}
    */
-  ngOnChanges(changes: SimpleChanges): void {
-    const currRecordings = changes.recordings?.currentValue;
-
-    if (currRecordings) {
-      this.recordingsChange.emit(currRecordings);
-    }
+  ngAfterViewInit() {
+    this.list.selectedOptions.changed.subscribe(event => {
+      this.selectedCount = this.selected.length;
+      this.cdRef.detectChanges();
+      
+      if (this.selected.length) {
+        this.selection.emit(this.selected[0]);
+      } else {
+        this.selection.emit();
+      }
+    });
   }
 
   /**
@@ -67,7 +76,6 @@ export class RecordingListComponent implements OnInit {
    */
   deselectAll() {
     this.list.deselectAll();
-    this.selection.emit();
   }
 
   /**
