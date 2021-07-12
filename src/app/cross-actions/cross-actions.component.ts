@@ -1,5 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { Recording } from '../shared/recording.model';
+import { SetAutoSearch } from '../shared/state/app.actions';
+import { AppState } from '../shared/state/app.state';
 
 @Component({
   selector: 'app-cross-actions',
@@ -7,13 +13,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./cross-actions.component.scss']
 })
 export class CrossActionsComponent implements OnInit {
-  @Input() isSelInput?: boolean;
-  @Input() isSelDatabase?: boolean;
-  @Input() isAutoSearch: boolean = true;
+  @Select(AppState.getAutoSearch) isAutoSearch$!: Observable<boolean>;
+  
+  @Input() isSelInput!: Recording | null;
+  @Input() isSelDatabase!: Recording | null;
   @Output() registration = new EventEmitter();
   @Output() matching = new EventEmitter();
 
-  constructor(private snackBar: MatSnackBar) { }
+  constructor(private snackBar: MatSnackBar, private store: Store) { }
 
   ngOnInit(): void {
   }
@@ -32,5 +39,9 @@ export class CrossActionsComponent implements OnInit {
     } else {
       this.snackBar.open('Please select an unmatched and a registered recording first', 'OK');
     }
+  }
+
+  onAutoSearchChange(toggleChange: MatSlideToggleChange) {
+    this.store.dispatch(new SetAutoSearch(toggleChange.checked));
   }
 }

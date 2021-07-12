@@ -1,11 +1,13 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Store } from '@ngxs/store';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { RecordingListComponent } from '../shared/recording-list/recording-list.component';
 import { Recording } from '../shared/recording.model';
+import { SelectInput } from '../shared/state/app.actions';
 import { RecordingsService } from './recordings.service';
 
 const SNACK_DELAY = environment.snackbarDelay;
@@ -21,13 +23,14 @@ const SNACK_DELAY = environment.snackbarDelay;
 })
 export class InputsComponent implements OnInit {
   @Input() dataFile!: string;
-  @Output() selection = new EventEmitter<Recording>();
 
   // Cancels current selection by clicking on any area within the list away from the actual recordings
-  // NOTE: clicks from actions buttons are prevented from bubbling.
   @HostListener('click', ['$event'])
   onClick(event: Event) {
-    this.deselectAll();
+    const targetEl = event.target as HTMLElement;
+    if (!targetEl.closest('.action-btn')) {
+      this.deselectAll();
+    }
   }
 
   @ViewChild(RecordingListComponent) recordingList!: RecordingListComponent;
@@ -43,7 +46,8 @@ export class InputsComponent implements OnInit {
 
   constructor(
     protected recordingsService: RecordingsService,
-    protected snackBar: MatSnackBar
+    protected snackBar: MatSnackBar,
+    protected store: Store
   ) { }
 
   /**
@@ -55,6 +59,10 @@ export class InputsComponent implements OnInit {
     this.recordings$ = this.updateState(fetched$, 'Fetching recordings...').pipe(
       tap(recordings => this.recordings = recordings)
     );
+  }
+
+  ngAfterViewInit() {
+    this.recordingList.selection.subscribe(recording => this.onSelection(recording));
   }
 
   /**
@@ -81,34 +89,14 @@ export class InputsComponent implements OnInit {
   }
 
 
-  /**
-   * Syncs the "selected" input's value with whatever selection the recording list
-   * ends up having after a change in the recordings collection.
-   * @param currRecordings - Rendered collection after changes.
-   * NOTE: assumes a single-option list.
-   */
-  onRecordingsChange(currRecordings: Recording[]) {
-
-    // Any previous selection is no longer present in the new recondings collection
-    if (this.selected && currRecordings.indexOf(this.selected) === -1) {
-      this.deselectAll();
-      
-    // Past selection previously not present occurs now in new recordings collection
-    } else if (!this.selected && this.recordingList.selected.length) {
-      this.selected = this.recordingList.selected[0];
-    }
-  }
-
-
   onSelection(recording: Recording) {
     this.selected = recording;
-    this.selection.emit(recording);
+    this.store.dispatch(new SelectInput(recording));
   }
 
-  
+
   deselectAll() {
     this.recordingList.deselectAll();
-    this.selected = undefined;
   }
 
   

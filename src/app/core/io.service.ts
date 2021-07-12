@@ -5,6 +5,7 @@ import { Observable} from 'rxjs';
 import { Papa } from 'ngx-papaparse';
 
 import { environment } from "src/environments/environment";
+import { delay } from "rxjs/operators";
 
 const DEFAULT_FETCH = environment.defaultFetch;
 const DEFAULT_PARSE = environment.defaultParse;

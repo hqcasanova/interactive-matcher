@@ -1,7 +1,8 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, of } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment.base';
 import { FuzzyService } from '../core/fuzzy.interface';
@@ -11,6 +12,8 @@ import { RecordingsService } from '../inputs/recordings.service';
 import { ConfirmDialogueComponent } from '../shared/confirm-dialogue/confirm-dialogue.component';
 import { RecordingListComponent } from '../shared/recording-list/recording-list.component';
 import { Recording } from '../shared/recording.model';
+import { SelectDatabase } from '../shared/state/app.actions';
+import { AppState } from '../shared/state/app.state';
 
 const SNACK_DELAY = environment.snackbarDelay;
 
@@ -21,9 +24,12 @@ const SNACK_DELAY = environment.snackbarDelay;
   providers: [ RecordingsService ]
 })
 export class DatabaseComponent extends InputsComponent implements OnInit {
-  
-  // External recording against which recordings on the database may be compared to.
-  @Input() reference?: Recording;
+  @Select(AppState.getAutoSearch) isAutoSearch$!: Observable<boolean>;
+  @Select(AppState.getSelInput) selInput$!: Observable<Recording>;
+  private selectionSubscription: Subscription;
+  private autoSearchSubscription: Subscription;
+  private _lastInput: Recording | undefined = undefined;
+  private _lastAutoSearch: boolean | undefined = undefined;
 
   @Output() registered = new EventEmitter<Recording>();
 
@@ -31,14 +37,38 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
 
   searchQuery: string | Recording = '';
   
+  /**
+   * Guarantees that every time an input recording is selected, this component's recordings list is
+   * updated with the search results yielded by using the input recording itself as the query. It also
+   * refreshes the list on auto-search enable with the search results of the last selected input recording
+   * (before enabling autosearch).
+   */
   constructor(
     recordingsService: RecordingsService,
-    snackBar: MatSnackBar, 
+    snackBar: MatSnackBar,
+    store: Store,
     public fuzzyService: FuzzyService,
     public dialogue: MatDialog,
     private cdRef: ChangeDetectorRef
   ) {
-    super(recordingsService, snackBar);
+    super(recordingsService, snackBar, store);
+    this.selectionSubscription = this.selInput$.subscribe(selInput => {
+      this._lastAutoSearch && this.search(selInput);
+      this._lastInput = selInput;
+    });
+    this.autoSearchSubscription = this.isAutoSearch$.subscribe(isAutoSearch => {
+      this._lastAutoSearch = isAutoSearch;
+      isAutoSearch && this.search(this._lastInput);
+    });
+  }
+
+  ngOnDestroy() {
+    this.selectionSubscription.unsubscribe();
+  }
+
+  onSelection(recording: Recording) {
+    this.selected = recording;
+    this.store.dispatch(new SelectDatabase(recording));
   }
 
   /**
@@ -118,7 +148,7 @@ export class DatabaseComponent extends InputsComponent implements OnInit {
    * @param query - String being searched for.
    * @param message - Text shown while waiting for the retrieval of search results.
    */
-  search(query: string | Recording, message: string = 'Searching...') {
+  search(query: string | Recording | undefined, message: string = 'Searching...') {
     let searched$;
     
     if (query) {
